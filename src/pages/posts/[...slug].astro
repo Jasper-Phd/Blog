@@ -40,7 +40,13 @@ const { title, description, pubDatetime, updatedDatetime, tags, categories } =
   post.data;
 ---
 
-<Layout title={title} description={description} ogType="article" publishedTime={pubDatetime}>
+<Layout
+  title={title}
+  description={description}
+  ogType="article"
+  publishedTime={pubDatetime}
+  toc={headings}
+>
   <article class="mx-auto max-w-3xl">
     <header class="mb-8">
       <div class="muted flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.8125rem]">
@@ -92,7 +98,9 @@ const { title, description, pubDatetime, updatedDatetime, tags, categories } =
       }
     </header>
 
-    <TableOfContents headings={headings} />
+    <div class="lg:hidden">
+      <TableOfContents headings={headings} />
+    </div>
 
     <div class="article mt-8">
       <Content />

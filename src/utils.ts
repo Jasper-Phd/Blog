@@ -3,6 +3,13 @@ import { SITE } from "./config";
 
 export type Post = CollectionEntry<"posts">;
 
+/** 侧边栏目录的一项 */
+export interface TocEntry {
+  depth: number;
+  text: string;
+  slug: string;
+}
+
 /** 构建时的仓库子路径，根路径部署时为空字符串 */
 const BASE = import.meta.env.BASE_URL.replace(/\/+$/, "");
 

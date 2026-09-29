@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import Sidebar from "../components/Sidebar.astro";
 import { SITE } from "../config";
+import type { TocEntry } from "../utils";
 import "katex/dist/katex.min.css";
 import "../styles/global.css";
 
@@ -13,9 +14,11 @@ interface Props {
   ogType?: "website" | "article";
   publishedTime?: Date;
   noindex?: boolean;
+  /** 传入后左侧栏下块会多出一个「目录」区块 */
+  toc?: TocEntry[];
 }
 
-const { title, description, ogType, publishedTime, noindex } = Astro.props;
+const { title, description, ogType, publishedTime, noindex, toc } = Astro.props;
 ---
 
 <!doctype html>
@@ -50,7 +53,7 @@ const { title, description, ogType, publishedTime, noindex } = Astro.props;
     >
 
     <div class="mx-auto flex w-full max-w-[1080px] gap-5 px-5 py-8 lg:gap-8">
-      <Sidebar />
+      <Sidebar toc={toc} />
 
       <div class="flex min-w-0 flex-1 flex-col">
         <Header />

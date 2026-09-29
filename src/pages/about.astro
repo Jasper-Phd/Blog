@@ -6,9 +6,10 @@ import Layout from "../layouts/Layout.astro";
 const entry = await getEntry("pages", "about");
 const rendered = entry ? await render(entry) : null;
 const Content = rendered?.Content;
+const headings = rendered?.headings ?? [];
 ---
 
-<Layout title="关于" description={`关于 ${SITE.author}`}>
+<Layout title="关于" description={`关于 ${SITE.author}`} toc={headings}>
   <div class="mx-auto max-w-3xl">
     <h1 class="page-title m-0 mb-8">关于</h1>
 
@@ -25,4 +26,3 @@ const Content = rendered?.Content;
     }
   </div>
 </Layout>
-

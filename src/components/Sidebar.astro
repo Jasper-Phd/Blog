@@ -1,13 +1,23 @@
 ---
-import { existsSync } from "node:fs";
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import photo from "../assets/photo.jpg";
 import { SITE } from "../config";
 import {
   getUniqueCategories,
   getUniqueTags,
   href,
   postFilter,
+  type TocEntry,
 } from "../utils";
+
+interface Props {
+  /** 当前页面的目录；为空表示这一页不需要目录 */
+  toc?: TocEntry[];
+}
+
+const { toc = [] } = Astro.props;
+const tocItems = toc.filter((item) => item.depth <= 3);
 
 const posts = await getCollection("posts", postFilter);
 
@@ -16,17 +26,6 @@ const stats = [
   { label: "分类", value: getUniqueCategories(posts).length, url: href("/categories/") },
   { label: "标签", value: getUniqueTags(posts).length, url: href("/tags/") },
 ];
-
-// 把 avatar.jpg / avatar.png 放进 public/ 目录就会自动替换占位头像
-const avatarFile = [
-  "avatar.jpg",
-  "avatar.jpeg",
-  "avatar.png",
-  "avatar.webp",
-  "avatar.svg",
-].find((file) => existsSync(`public/${file}`));
-
-const avatarSrc = href(`/${avatarFile ?? "avatar.svg"}`);
 
 const pathname = Astro.url.pathname;
 const homePath = href("/");
@@ -138,14 +137,14 @@ const navIcons: Record<string, string[]> = {
   <!-- 下块：头像 / 统计 / 联系方式 / 友链 / 工具行 -->
   <div class="sidebar-block">
   <div>
-    <img
-      src={avatarSrc}
-      alt={`${SITE.author} 的头像`}
+    <Image
+      src={photo}
+      alt={`${SITE.author} 的照片`}
       class="avatar"
-      width="208"
-      height="208"
+      width={360}
+      format="webp"
+      quality={82}
       loading="lazy"
-      decoding="async"
     />
   </div>
 
@@ -180,6 +179,38 @@ const navIcons: Record<string, string[]> = {
       }
     </ul>
   </section>
+
+  {
+    tocItems.length > 1 && (
+      <section class="mt-5">
+        <h2 class="leaf-heading">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6h16M4 12h10M4 18h13"></path>
+          </svg>
+          目录
+        </h2>
+        <nav class="sidebar-toc" aria-label="本页目录">
+          <ul class="m-0 list-none p-0">
+            {tocItems.map((item) => (
+              <li class={item.depth > 2 ? "is-sub" : undefined}>
+                <a href={`#${item.slug}`}>{item.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </section>
+    )
+  }
 
   <section class="mt-5">
     <h2 class="leaf-heading">

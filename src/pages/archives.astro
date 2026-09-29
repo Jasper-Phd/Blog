@@ -6,9 +6,14 @@ import { groupByYear, postFilter, postUrl, sortByPubDate } from "../utils";
 
 const posts = (await getCollection("posts", postFilter)).sort(sortByPubDate);
 const groups = groupByYear(posts);
+const yearToc = groups.map(([year]) => ({
+  depth: 2,
+  text: `${year} 年`,
+  slug: year,
+}));
 ---
 
-<Layout title="归档" description="按年份浏览全部文章">
+<Layout title="归档" description="按年份浏览全部文章" toc={yearToc}>
   <header class="mb-8">
     <h1 class="page-title m-0">归档</h1>
     <p class="muted mt-2 mb-0 text-[0.9375rem]">共 {posts.length} 篇文章</p>
@@ -18,7 +23,10 @@ const groups = groupByYear(posts);
     {
       groups.map(([year, list]) => (
         <section>
-          <h2 class="m-0 mb-4 flex items-baseline gap-3 text-[1.25rem] font-semibold tracking-tight">
+          <h2
+            id={year}
+            class="m-0 mb-4 flex items-baseline gap-3 text-[1.25rem] font-semibold tracking-tight"
+          >
             {year}
             <span class="muted text-[0.8125rem] font-normal">{list.length} 篇</span>
           </h2>
@@ -42,4 +50,3 @@ const groups = groupByYear(posts);
     }
   </div>
 </Layout>
-
