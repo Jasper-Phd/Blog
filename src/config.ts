@@ -17,7 +17,7 @@ export const SITE = {
 
   /** GitHub 用户名 / 仓库 */
   githubUser: "Jasper-Phd",
-  repo: "Jasper-Phd/Blog",
+  repo: "Jasper-Phd/Jasper-Phd.github.io",
 
   /** 首页每页显示几篇文章 */
   postsPerPage: 8,
@@ -42,7 +42,7 @@ export const SITE = {
    */
   giscus: {
     enabled: true,
-    repo: "Jasper-Phd/Blog",
+    repo: "Jasper-Phd/Jasper-Phd.github.io",
     repoId: "R_kgDOUxd9vA",
     category: "Announcements",
     categoryId: "DIC_kwDOUxd9vM4DGn3a",

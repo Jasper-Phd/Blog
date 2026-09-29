@@ -69,7 +69,7 @@ git push
 
 ### 方式一：GitHub Pages（已启用并部署）
 
-仓库 `Jasper-Phd/Blog` 已完成首次配置：**Settings → Pages → Source 已设为 GitHub Actions**。之后只要推送代码到 `main` 分支，就会自动构建发布。
+仓库 `Jasper-Phd/Jasper-Phd.github.io` 已完成首次配置：**Settings → Pages → Source 已设为 GitHub Actions**。之后只要推送代码到 `main` 分支，就会自动构建发布。
 
 线上地址：<https://jasper-phd.github.io/>
 
@@ -99,7 +99,7 @@ const BASE_PATH = process.env.BASE_PATH ?? "/仓库名";
 
 | 字段 | 当前值 |
 | --- | --- |
-| `repo` | `Jasper-Phd/Blog` |
+| `repo` | `Jasper-Phd/Jasper-Phd.github.io` |
 | `repoId` | `R_kgDOUxd9vA` |
 | `category` | `Announcements` |
 | `categoryId` | `DIC_kwDOUxd9vM4DGn3a` |
