@@ -86,7 +86,7 @@
    1.5 四季配色
    只调整主色与底色，整体绿色基调不变；由访问时的月份决定
    ============================================================ */
-[data-season="spring"] {
+[data-season="spring"]:not([data-theme="dark"]) {
   --accent: #3f8f5f;
   --accent-soft: #e8f4ec;
   --accent-2: #c4708c;
@@ -95,7 +95,7 @@
   --bg-soft: #eef7ef;
 }
 
-[data-season="autumn"] {
+[data-season="autumn"]:not([data-theme="dark"]) {
   --accent: #5f8a43;
   --accent-soft: #eef3e6;
   --accent-2: #c4781f;
@@ -104,7 +104,7 @@
   --bg-soft: #f3f1e5;
 }
 
-[data-season="winter"] {
+[data-season="winter"]:not([data-theme="dark"]) {
   --accent: #2f7d7a;
   --accent-soft: #e6f3f2;
   --accent-2: #5f8fb0;
@@ -117,18 +117,27 @@
   --accent: #78d39c;
   --accent-soft: #15301f;
   --bg: #0c1310;
+  --bg-soft: #111d16;
+  --surface: #131f18;
+  --surface-tint: #12201a;
 }
 
 [data-theme="dark"][data-season="autumn"] {
   --accent: #a9c86a;
   --accent-soft: #262b16;
   --bg: #12130e;
+  --bg-soft: #1a1a12;
+  --surface: #1c1d14;
+  --surface-tint: #1a1f13;
 }
 
 [data-theme="dark"][data-season="winter"] {
   --accent: #6cc5c0;
   --accent-soft: #11282a;
   --bg: #0b1214;
+  --bg-soft: #101a1d;
+  --surface: #121e21;
+  --surface-tint: #12201f;
 }
 
 /* 傍晚时段纸面偏暖 */
