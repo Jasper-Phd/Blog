@@ -9,12 +9,12 @@ import katex from "katex";
 // 站点最终地址。换成自定义域名时，只改这一行（结尾带斜杠）。
 const SITE_URL = "https://jasper-phd.github.io/";
 
-// GitHub Pages 的仓库子路径。当前仓库叫 Blog，所以站点地址是
-// https://jasper-phd.github.io/Blog/
+// 站点部署路径。仓库叫 Jasper-Phd.github.io（用户主页仓库）时位于根路径，
+// 站点地址即 https://jasper-phd.github.io/
 //
-// 如果把仓库改名成 Jasper-Phd.github.io（用户主页仓库），
-// 只要把下面这行改成 "/"，就会变成 https://jasper-phd.github.io/
-const BASE_PATH = process.env.BASE_PATH ?? "/Blog";
+// 如果哪天想改回子路径部署（仓库换成普通名字），
+// 把这里改成 "/仓库名" 即可，其余代码会自动跟随。
+const BASE_PATH = process.env.BASE_PATH ?? "/";
 
 /**
  * 把 Markdown 里的 $行内公式$ 与 $$独立公式$$ 在构建阶段渲染成 KaTeX 静态 HTML。

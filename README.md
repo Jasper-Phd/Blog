@@ -20,7 +20,7 @@ Jasper Li 的个人博客。纯静态站点，零服务器、零数据库、零�
 
 ```bash
 npm install       # 首次运行
-npm run dev       # 打开 http://localhost:4321/Blog/
+npm run dev       # 打开 http://localhost:4321/
 ```
 
 预览正式构建的效果（搜索功能只在构建后可用）：
@@ -71,20 +71,19 @@ git push
 
 仓库 `Jasper-Phd/Blog` 已完成首次配置：**Settings → Pages → Source 已设为 GitHub Actions**。之后只要推送代码到 `main` 分支，就会自动构建发布。
 
-线上地址：<https://jasper-phd.github.io/Blog/>
+线上地址：<https://jasper-phd.github.io/>
 
 > 注意：首次启用 Pages 必须由仓库管理员在设置里手动操作一次，流水线里的临时凭证没有这个权限。
 
-### 想要更短的网址
+### 为什么网址是根路径
 
-现在仓库叫 `Blog`，所以站点地址带一层 `/Blog/`。把仓库改名为 `Jasper-Phd.github.io`（GitHub 会自动重定向旧的 Git 地址）之后，只要改一行：
+仓库名是 `Jasper-Phd.github.io`，属于 GitHub 的「用户主页仓库」，站点直接位于根路径。如果哪天仓库换成别的名字，站点会变成子路径部署，只需改 `astro.config.mjs` 一行：
 
 ```js
-// astro.config.mjs
-const BASE_PATH = process.env.BASE_PATH ?? "/";
+const BASE_PATH = process.env.BASE_PATH ?? "/仓库名";
 ```
 
-站点就会变成 <https://jasper-phd.github.io/>。其余地方不用动。
+站点内所有链接都由 `src/utils.ts` 的 `href()` 统一拼接 `import.meta.env.BASE_URL`，因此子路径、根路径、自定义域名三种情况都不需要动其他代码。
 
 ### 方式二：Cloudflare Pages（带宽不限量，推荐后期切换）
 
