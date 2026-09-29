@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";
 import PostListItem from "../../components/PostListItem.astro";
+import SwingDivider from "../../components/SwingDivider.astro";
 import Layout from "../../layouts/Layout.astro";
 import {
   getPostsByCategory,
@@ -40,6 +41,13 @@ const { category, posts } = Astro.props as { category: string; posts: Post[] };
   </header>
 
   <div class="post-list">
-    {posts.map((post) => <PostListItem post={post} />)}
+    {
+      posts.map((post, index) => (
+        <Fragment>
+          {index > 0 && <SwingDivider />}
+          <PostListItem post={post} />
+        </Fragment>
+      ))
+    }
   </div>
 </Layout>

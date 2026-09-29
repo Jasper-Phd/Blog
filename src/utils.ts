@@ -43,15 +43,35 @@ export function yearOf(date: Date) {
   }).format(date);
 }
 
+/** 去掉 Markdown 标记，得到可计数的纯文本 */
+function countableText(body: string) {
+  return body
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/\$\$[\s\S]*?\$\$/g, " ")
+    .replace(/\$[^$\n]*\$/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[#>*_`~|]/g, " ");
+}
+
+function countText(body: string) {
+  const text = countableText(body);
+  const cjk = (text.match(/[\u3400-\u9fff]/g) ?? []).length;
+  const latin = (text.match(/[A-Za-z0-9][A-Za-z0-9'-]*/g) ?? []).length;
+  return { cjk, latin };
+}
+
+/** 字数统计：中文按字，西文按词 */
+export function wordCount(body = "") {
+  const { cjk, latin } = countText(body);
+  return cjk + latin;
+}
+
 /** 粗略估算阅读时长（中文按字数，英文按词数） */
 export function readingTime(body = "") {
-  const text = body
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/`[^`]*`/g, " ")
-    .replace(/\[[^\]]*\]\([^)]*\)/g, " ");
-  const cjk = (text.match(/[\u3400-\u9fff]/g) ?? []).length;
-  const words = (text.match(/[A-Za-z0-9][A-Za-z0-9'-]*/g) ?? []).length;
-  return Math.max(1, Math.round(cjk / 350 + words / 220));
+  const { cjk, latin } = countText(body);
+  return Math.max(1, Math.round(cjk / 350 + latin / 220));
 }
 
 /** 从正文里截一段纯文本作为摘要，用于列表页展示部分内容 */
@@ -61,6 +81,8 @@ export function excerpt(body = "", max = 150) {
     .replace(/<!--[\s\S]*?-->/g, " ")
     // 去掉整行标题，摘要里不重复出现小标题
     .replace(/^[ \t]{0,3}#{1,6}[ \t]+.*$/gm, " ")
+    // 去掉表格行，摘要里不出现 Markdown 表格
+    .replace(/^[ \t]{0,3}\|.*\|[ \t]*$/gm, " ")
     .replace(/^[ \t]{0,3}>\s?/gm, "")
     .replace(/^[ \t]{0,3}([-*+]|\d+\.)\s+/gm, "")
     .replace(/\$\$[\s\S]*?\$\$/g, " ")

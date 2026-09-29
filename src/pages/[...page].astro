@@ -3,6 +3,7 @@ import type { GetStaticPaths, Page } from "astro";
 import { getCollection } from "astro:content";
 import Pagination from "../components/Pagination.astro";
 import PostListItem from "../components/PostListItem.astro";
+import SwingDivider from "../components/SwingDivider.astro";
 import { SITE } from "../config";
 import Layout from "../layouts/Layout.astro";
 import { postFilter, sortByPubDate, type Post } from "../utils";
@@ -17,24 +18,18 @@ const isFirstPage = page.currentPage === 1;
 ---
 
 <Layout>
-  <section class="mb-7 border-b pb-6" style="border-color: var(--border);">
-    <h1 class="m-0 text-[1.6rem] font-bold leading-tight tracking-tight">
-      {isFirstPage ? "最新文章" : `第 ${page.currentPage} 页`}
-    </h1>
-    {
-      isFirstPage && (
-        <p class="soft m-0 mt-3 max-w-2xl text-[0.9375rem] leading-relaxed">
-          {SITE.description}
-        </p>
-      )
-    }
-  </section>
+  <h1 class="sr-only">
+    {isFirstPage ? SITE.title : `第 ${page.currentPage} 页`}
+  </h1>
 
   {
     page.data.length > 0 ? (
       <div class="post-list">
-        {page.data.map((post) => (
-          <PostListItem post={post} />
+        {page.data.map((post, index) => (
+          <Fragment>
+            {index > 0 && <SwingDivider />}
+            <PostListItem post={post} />
+          </Fragment>
         ))}
       </div>
     ) : (
@@ -46,4 +41,3 @@ const isFirstPage = page.currentPage === 1;
 
   <Pagination page={page} />
 </Layout>
-
