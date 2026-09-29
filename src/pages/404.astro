@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { href } from "../utils";
 ---
 
 <Layout title="页面未找到" noindex>
@@ -8,9 +9,8 @@ import Layout from "../layouts/Layout.astro";
     <h1 class="m-0 mt-4 text-[1.5rem] font-semibold tracking-tight">这个页面不存在</h1>
     <p class="muted mt-3">链接可能已经失效，或者文章被移动到别处了。</p>
     <div class="mt-8 flex justify-center gap-3">
-      <a href="/" class="btn">回到首页</a>
-      <a href="/search/" class="btn">搜索文章</a>
+      <a href={href("/")} class="btn">回到首页</a>
+      <a href={href("/search/")} class="btn">搜索文章</a>
     </div>
   </div>
 </Layout>
-

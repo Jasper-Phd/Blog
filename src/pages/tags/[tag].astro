@@ -6,6 +6,7 @@ import Layout from "../../layouts/Layout.astro";
 import {
   getPostsByTag,
   getUniqueTags,
+  href,
   postFilter,
   sortByPubDate,
   type Post,
@@ -25,7 +26,10 @@ const { tag, posts } = Astro.props as { tag: string; posts: Post[] };
 
 <Layout title={`#${tag}`} description={`标签「${tag}」下的全部文章`}>
   <header class="mb-8">
-    <a href="/tags/" class="muted text-[0.8125rem] transition-colors hover:text-[var(--accent)]">
+    <a
+      href={href("/tags/")}
+      class="muted text-[0.8125rem] transition-colors hover:text-[var(--accent)]"
+    >
       ← 全部标签
     </a>
     <h1 class="page-title m-0 mt-3">#{tag}</h1>
@@ -36,4 +40,3 @@ const { tag, posts } = Astro.props as { tag: string; posts: Post[] };
     {posts.map((post) => <PostCard post={post} />)}
   </div>
 </Layout>
-

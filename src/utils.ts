@@ -3,6 +3,18 @@ import { SITE } from "./config";
 
 export type Post = CollectionEntry<"posts">;
 
+/** 构建时的仓库子路径，根路径部署时为空字符串 */
+const BASE = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+/**
+ * 给站内绝对路径补上仓库子路径。
+ * 例如 href("/posts/x/") 在子路径部署下会变成 /Blog/posts/x/。
+ */
+export function href(path: string) {
+  const clean = path.startsWith("/") ? path : `/${path}`;
+  return `${BASE}${clean}`;
+}
+
 /** 开发环境显示草稿，正式构建时自动排除 */
 export function postFilter({ data }: Post) {
   return import.meta.env.PROD ? data.draft !== true : true;
@@ -43,11 +55,11 @@ export function readingTime(body = "") {
 }
 
 export function postUrl(post: Post) {
-  return `/posts/${post.id}/`;
+  return href(`/posts/${post.id}/`);
 }
 
 export function tagUrl(tag: string) {
-  return `/tags/${encodeURIComponent(tag)}/`;
+  return href(`/tags/${encodeURIComponent(tag)}/`);
 }
 
 /** 统计所有标签及其文章数，按数量倒序 */
@@ -78,4 +90,3 @@ export function groupByYear(posts: Post[]) {
   }
   return [...groups.entries()].sort((a, b) => Number(b[0]) - Number(a[0]));
 }
-

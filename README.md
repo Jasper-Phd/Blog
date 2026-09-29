@@ -20,7 +20,7 @@ Jasper Li 的个人博客。纯静态站点，零服务器、零数据库、零�
 
 ```bash
 npm install       # 首次运行
-npm run dev       # 打开 http://localhost:4321
+npm run dev       # 打开 http://localhost:4321/Blog/
 ```
 
 预览正式构建的效果（搜索功能只在构建后可用）：
@@ -69,11 +69,21 @@ git push
 
 ### 方式一：GitHub Pages（已配置好）
 
-1. 在 GitHub 新建仓库，名字必须是 `Jasper-Phd.github.io`
-2. 推送代码到 `main` 分支
-3. 进入仓库 **Settings → Pages**，把 Source 改成 **GitHub Actions**
+1. 推送代码到 `main` 分支
+2. 进入仓库 **Settings → Pages**，把 Source 改成 **GitHub Actions**
 
-之后每次推送都会自动构建发布，地址是 <https://jasper-phd.github.io>。
+之后每次推送都会自动构建发布，地址是 <https://jasper-phd.github.io/Blog/>。
+
+### 想要更短的网址
+
+现在仓库叫 `Blog`，所以站点地址带一层 `/Blog/`。把仓库改名为 `Jasper-Phd.github.io`（GitHub 会自动重定向旧的 Git 地址）之后，只要改一行：
+
+```js
+// astro.config.mjs
+const BASE_PATH = process.env.BASE_PATH ?? "/";
+```
+
+站点就会变成 <https://jasper-phd.github.io/>。其余地方不用动。
 
 ### 方式二：Cloudflare Pages（带宽不限量，推荐后期切换）
 
@@ -81,7 +91,7 @@ git push
 2. 构建命令填 `npm run build`，输出目录填 `dist`
 3. 完成后会得到一个 `xxx.pages.dev` 的免费域名
 
-换域名后记得同步修改两处：`astro.config.mjs` 里的 `SITE_URL`、`src/config.ts` 里的 `website`，以及 `public/robots.txt` 里的 sitemap 地址。
+换域名后记得同步修改 `astro.config.mjs` 里的 `SITE_URL` 和 `src/config.ts` 里的 `website`。robots、sitemap、RSS 都会自动跟着变。
 
 ## 开启评论（Giscus）
 
@@ -120,7 +130,7 @@ git push
 │  ├─ content/posts/              你的文章
 │  ├─ content/pages/about.md      关于页
 │  ├─ layouts/Layout.astro        页面骨架
-│  ├─ pages/                      路由：/、/posts、/tags、/archives、/about、/search、/rss.xml
+│  ├─ pages/                      路由：/、/posts、/tags、/archives、/about、/search、/rss.xml、/robots.txt
 │  ├─ styles/global.css           全部样式与设计变量
 │  ├─ config.ts                   站点配置
 │  └─ content.config.ts           内容字段定义
@@ -133,3 +143,5 @@ git push
 **公式**：Astro 7 默认使用原生 Markdown 处理器（Sätteri），它内置数学语法解析。`astro.config.mjs` 里注册了一个很小的 hast 插件，把公式节点在构建阶段交给 KaTeX 渲染成静态 HTML，浏览器端不需要加载任何脚本，也不依赖外部 CDN。
 
 **搜索**：`npm run build` 会先构建站点，再用 Pagefind 扫描生成的 HTML 建索引。**开发模式下搜索页不可用**，这是正常的。
+
+**子路径**：站点所有内部链接都由 `src/utils.ts` 里的 `href()` 统一加上 `import.meta.env.BASE_URL`，因此部署在 `/Blog/` 子路径、根路径还是自定义域名下都不需要改代码。

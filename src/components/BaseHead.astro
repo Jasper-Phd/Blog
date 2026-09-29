@@ -1,6 +1,7 @@
 ---
 import { existsSync } from "node:fs";
 import { SITE } from "../config";
+import { href } from "../utils";
 
 interface Props {
   title?: string;
@@ -24,7 +25,8 @@ const canonical = new URL(Astro.url.pathname, siteUrl).href;
 
 // 想给社交平台分享卡片配图，把 1200x630 的图片放到 public/og.png 即可自动启用。
 const hasOgImage = existsSync("public/og.png");
-const ogImage = new URL(hasOgImage ? "/og.png" : "/favicon.svg", siteUrl).href;
+const ogImage = new URL(href(hasOgImage ? "/og.png" : "/favicon.svg"), siteUrl).href;
+const feedUrl = new URL(href("/rss.xml"), siteUrl).href;
 
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
@@ -47,12 +49,12 @@ const analyticsToken = SITE.analytics.cloudflareToken;
 <meta name="author" content={SITE.author} />
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 <link rel="canonical" href={canonical} />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/svg+xml" href={href("/favicon.svg")} />
 <link
   rel="alternate"
   type="application/rss+xml"
   title={SITE.title}
-  href={new URL("/rss.xml", siteUrl).href}
+  href={feedUrl}
 />
 
 <meta property="og:type" content={ogType} />
@@ -77,4 +79,3 @@ const analyticsToken = SITE.analytics.cloudflareToken;
     />
   )
 }
-

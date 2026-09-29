@@ -1,5 +1,6 @@
 ---
 import { SITE } from "../config";
+import { href } from "../utils";
 
 const year = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -16,7 +17,7 @@ const year = new Intl.DateTimeFormat("en-US", {
       {
         SITE.social.map((item) => (
           <a
-            href={item.href}
+            href={item.href.startsWith("http") ? item.href : href(item.href)}
             class="transition-colors hover:text-[var(--accent)]"
             target={item.href.startsWith("http") ? "_blank" : undefined}
             rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
@@ -35,4 +36,3 @@ const year = new Intl.DateTimeFormat("en-US", {
     </div>
   </div>
 </footer>
-

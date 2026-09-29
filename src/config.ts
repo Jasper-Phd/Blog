@@ -67,4 +67,3 @@ export const SITE = {
 } as const;
 
 export type Site = typeof SITE;
-
