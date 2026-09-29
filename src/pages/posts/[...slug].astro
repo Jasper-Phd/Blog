@@ -1,0 +1,119 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import Comments from "../../components/Comments.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import { SITE } from "../../config";
+import Layout from "../../layouts/Layout.astro";
+import {
+  postFilter,
+  postUrl,
+  readingTime,
+  sortByPubDate,
+  tagUrl,
+  type Post,
+} from "../../utils";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = (await getCollection("posts", postFilter)).sort(sortByPubDate);
+
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      newer: posts[index - 1] ?? null,
+      older: posts[index + 1] ?? null,
+    },
+  }));
+};
+
+const { post, newer, older } = Astro.props as {
+  post: Post;
+  newer: Post | null;
+  older: Post | null;
+};
+
+const { Content, headings } = await render(post);
+const { title, description, pubDatetime, updatedDatetime, tags } = post.data;
+---
+
+<Layout title={title} description={description} ogType="article" publishedTime={pubDatetime}>
+  <article class="mx-auto max-w-3xl">
+    <header class="mb-8">
+      <div class="muted flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.8125rem]">
+        <FormattedDate date={pubDatetime} />
+        <span aria-hidden="true">·</span>
+        <span>约 {readingTime(post.body)} 分钟</span>
+        {
+          updatedDatetime && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                更新于 <FormattedDate date={updatedDatetime} />
+              </span>
+            </>
+          )
+        }
+      </div>
+
+      <h1 class="m-0 mt-3 text-[1.9rem] font-bold leading-[1.2] tracking-tight sm:text-[2.2rem]">
+        {title}
+      </h1>
+
+      {description && <p class="soft mt-4 mb-0 text-[1.0625rem] leading-relaxed">{description}</p>}
+
+      {
+        tags.length > 0 && (
+          <div class="mt-5 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <a href={tagUrl(tag)} class="tag">
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    <TableOfContents headings={headings} />
+
+    <div class="article mt-8">
+      <Content />
+    </div>
+
+    <footer class="mt-12 border-t pt-6" style="border-color: var(--border);">
+      <p class="muted m-0 text-[0.8125rem] leading-relaxed">
+        本文采用
+        <a
+          href={SITE.license.url}
+          class="accent-text"
+          target="_blank"
+          rel="noopener noreferrer">{SITE.license.name}</a
+        > 许可协议，转载请注明出处与作者。
+      </p>
+    </footer>
+
+    {
+      (newer || older) && (
+        <nav class="mt-10 grid gap-3 sm:grid-cols-2" aria-label="相邻文章">
+          {newer && (
+            <a href={postUrl(newer)} class="card">
+              <span class="muted text-[0.75rem]">较新的一篇</span>
+              <span class="card-title mt-1 block leading-snug">{newer.data.title}</span>
+            </a>
+          )}
+          {older && (
+            <a href={postUrl(older)} class="card sm:text-right">
+              <span class="muted text-[0.75rem]">较早的一篇</span>
+              <span class="card-title mt-1 block leading-snug">{older.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )
+    }
+
+    <Comments />
+  </article>
+</Layout>
+

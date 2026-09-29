@@ -1,0 +1,80 @@
+---
+import { existsSync } from "node:fs";
+import { SITE } from "../config";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogType?: "website" | "article";
+  publishedTime?: Date;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = SITE.description,
+  ogType = "website",
+  publishedTime,
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} · ${SITE.tagline}`;
+const siteUrl = Astro.site ?? new URL(SITE.website);
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+
+// 想给社交平台分享卡片配图，把 1200x630 的图片放到 public/og.png 即可自动启用。
+const hasOgImage = existsSync("public/og.png");
+const ogImage = new URL(hasOgImage ? "/og.png" : "/favicon.svg", siteUrl).href;
+
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": ogType === "article" ? "BlogPosting" : "WebSite",
+  headline: pageTitle,
+  description,
+  url: canonical,
+  inLanguage: SITE.lang,
+  author: { "@type": "Person", name: SITE.author },
+  ...(publishedTime ? { datePublished: publishedTime.toISOString() } : {}),
+});
+
+const analyticsToken = SITE.analytics.cloudflareToken;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={SITE.author} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<link rel="canonical" href={canonical} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE.title}
+  href={new URL("/rss.xml", siteUrl).href}
+/>
+
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={SITE.title} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content="zh_CN" />
+{publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json" set:html={structuredData} />
+
+{
+  analyticsToken && (
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={JSON.stringify({ token: analyticsToken })}
+    />
+  )
+}
+

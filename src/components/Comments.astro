@@ -1,0 +1,45 @@
+---
+import { SITE } from "../config";
+
+const { giscus } = SITE;
+const dev = import.meta.env.DEV;
+const ready = giscus.enabled && giscus.repoId && giscus.categoryId;
+---
+
+{
+  ready && (
+    <section class="mt-14">
+      <h2 class="mb-4 text-[1.0625rem] font-semibold">评论</h2>
+      <div class="surface overflow-hidden p-2">
+        <script
+          is:inline
+          src="https://giscus.app/client.js"
+          data-repo={giscus.repo}
+          data-repo-id={giscus.repoId}
+          data-category={giscus.category}
+          data-category-id={giscus.categoryId}
+          data-mapping={giscus.mapping}
+          data-strict="0"
+          data-reactions-enabled={giscus.reactionsEnabled}
+          data-emit-metadata="0"
+          data-input-position={giscus.inputPosition}
+          data-theme="preferred_color_scheme"
+          data-lang="zh-CN"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async
+        />
+      </div>
+    </section>
+  )
+}
+
+{
+  dev && !ready && (
+    <section class="muted mt-14 text-[0.8125rem]">
+      评论区尚未开启。在 <code>src/config.ts</code> 的 <code>giscus</code> 里填入 repoId 与
+      categoryId 即可（步骤见 README）。
+    </section>
+  )
+}
+

@@ -1,0 +1,38 @@
+---
+import type { Page } from "astro";
+import type { Post } from "../utils";
+
+interface Props {
+  page: Page<Post>;
+}
+const { page } = Astro.props;
+const { url, currentPage, lastPage } = page;
+const urlPrev = url.prev;
+const urlNext = url.next;
+---
+
+{
+  lastPage > 1 && (
+    <nav class="mt-10 flex items-center justify-between gap-3" aria-label="分页导航">
+      {urlPrev ? (
+        <a href={urlPrev} class="btn">
+          ← 更新
+        </a>
+      ) : (
+        <span></span>
+      )}
+
+      <span class="muted text-[0.8125rem]">
+        第 {currentPage} / {lastPage} 页
+      </span>
+
+      {urlNext ? (
+        <a href={urlNext} class="btn">
+          更早 →
+        </a>
+      ) : (
+        <span></span>
+      )}
+    </nav>
+  )
+}

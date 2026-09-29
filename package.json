@@ -1,0 +1,31 @@
+{
+  "name": "ladyliberty",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LadyLiberty — Jasper Li 的个人博客",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "check": "astro check",
+    "new": "node scripts/new-post.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.2",
+    "@astrojs/mdx": "^8.0.2",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
+    "katex": "^0.18.9",
+    "pagefind": "^1.5.2",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
+  }
+}

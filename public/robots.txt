@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jasper-phd.github.io/sitemap-index.xml
+

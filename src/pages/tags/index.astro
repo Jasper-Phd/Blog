@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import { SITE } from "../../config";
+import Layout from "../../layouts/Layout.astro";
+import { getUniqueTags, postFilter, tagUrl } from "../../utils";
+
+const posts = await getCollection("posts", postFilter);
+const tags = getUniqueTags(posts);
+---
+
+<Layout title="标签" description={`${SITE.title} 的全部标签`}>
+  <header class="mb-8">
+    <h1 class="page-title m-0">标签</h1>
+    <p class="muted mt-2 mb-0 text-[0.9375rem]">共 {tags.length} 个标签</p>
+  </header>
+
+  <div class="flex flex-wrap gap-2">
+    {
+      tags.map(({ tag, count }) => (
+        <a
+          href={tagUrl(tag)}
+          class="tag"
+          style="font-size:0.9375rem;padding:0.3rem 0.85rem;"
+        >
+          #{tag}
+          <span class="opacity-60">{count}</span>
+        </a>
+      ))
+    }
+  </div>
+</Layout>
+

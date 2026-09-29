@@ -1,0 +1,97 @@
+---
+import type { GetStaticPaths, Page } from "astro";
+import { getCollection } from "astro:content";
+import Pagination from "../components/Pagination.astro";
+import PostCard from "../components/PostCard.astro";
+import { SITE } from "../config";
+import Layout from "../layouts/Layout.astro";
+import { postFilter, sortByPubDate, type Post } from "../utils";
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = (await getCollection("posts", postFilter)).sort(sortByPubDate);
+  return paginate(posts, { pageSize: SITE.postsPerPage });
+};
+
+const { page } = Astro.props as { page: Page<Post> };
+
+const isFirstPage = page.currentPage === 1;
+const featured = isFirstPage ? page.data.filter((post) => post.data.featured).slice(0, 3) : [];
+const featuredIds = new Set(featured.map((post) => post.id));
+const rest = page.data.filter((post) => !featuredIds.has(post.id));
+---
+
+<Layout>
+  {
+    isFirstPage && (
+      <section class="mb-14 border-b pb-10" style="border-color: var(--border);">
+        <p class="accent-text m-0 mb-3 text-[0.75rem] font-semibold uppercase tracking-[0.2em]">
+          {SITE.tagline}
+        </p>
+        <h1 class="m-0 text-[2.1rem] font-bold leading-[1.15] tracking-tight sm:text-[2.6rem]">
+          {SITE.title}
+        </h1>
+        <p class="soft mt-4 mb-0 max-w-2xl text-[1.0625rem] leading-relaxed">
+          {SITE.description}
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-2">
+          <a href="/about/" class="btn">
+            关于我
+          </a>
+          <a href="/archives/" class="btn">
+            全部文章
+          </a>
+          {
+            SITE.social.map((item) => (
+              <a
+                href={item.href}
+                class="btn"
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              >
+                {item.name}
+              </a>
+            ))
+          }
+        </div>
+      </section>
+    )
+  }
+
+  {
+    featured.length > 0 && (
+      <section class="mb-12">
+        <h2 class="muted m-0 mb-4 text-[0.75rem] font-semibold uppercase tracking-wider">
+          精选
+        </h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section>
+    <h2 class="muted m-0 mb-4 text-[0.75rem] font-semibold uppercase tracking-wider">
+      {isFirstPage ? "最新文章" : `第 ${page.currentPage} 页`}
+    </h2>
+
+    {
+      rest.length > 0 ? (
+        <div class="grid gap-4">
+          {rest.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <p class="muted text-[0.9375rem]">
+          还没有文章。在 <code>src/content/posts/</code> 里新建一个 Markdown 文件就能发布。
+        </p>
+      )
+    }
+  </section>
+
+  <Pagination page={page} />
+</Layout>
+

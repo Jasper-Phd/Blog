@@ -1,0 +1,59 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE } from "../config";
+import "katex/dist/katex.min.css";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogType?: "website" | "article";
+  publishedTime?: Date;
+  noindex?: boolean;
+}
+
+const { title, description, ogType, publishedTime, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      ogType={ogType}
+      publishedTime={publishedTime}
+      noindex={noindex}
+    />
+    <script is:inline>
+      // 尽早决定主题，避免刷新时闪白
+      (() => {
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme = stored ?? (prefersDark ? "dark" : "light");
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+  </head>
+
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-[var(--accent)] focus:px-3 focus:py-2 focus:text-[var(--accent-fg)]"
+      >跳到正文</a
+    >
+
+    <Header />
+
+    <main id="main" class="mx-auto w-full max-w-5xl flex-1 px-5 py-10" data-pagefind-body>
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

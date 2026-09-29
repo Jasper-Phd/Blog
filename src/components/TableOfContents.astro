@@ -1,0 +1,30 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+const { headings } = Astro.props;
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+
+{
+  toc.length > 1 && (
+    <nav class="surface p-4" aria-labelledby="toc-heading">
+      <p
+        id="toc-heading"
+        class="muted mb-2 text-[0.75rem] font-semibold uppercase tracking-wider"
+      >
+        本文目录
+      </p>
+      <ul class="toc-list">
+        {toc.map((heading) => (
+          <li class={heading.depth === 3 ? "toc-depth-3" : undefined}>
+            <a href={`#${heading.slug}`}>{heading.text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+

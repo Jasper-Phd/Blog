@@ -1,0 +1,53 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="搜索" description="站内全文搜索">
+  <div class="mx-auto max-w-2xl">
+    <h1 class="page-title m-0 mb-2">搜索</h1>
+    <p class="muted mt-0 mb-6 text-[0.9375rem]">输入关键词，全文检索本站所有文章。</p>
+
+    <div id="search"></div>
+
+    <p id="search-fallback" class="muted mt-4 hidden text-[0.875rem]">
+      搜索索引在正式构建时生成。本地想试：先跑 <code>npm run build</code>，再跑
+      <code>npm run preview</code>。
+    </p>
+  </div>
+
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <script is:inline>
+    (() => {
+      const mount = () => {
+        const fallback = document.getElementById("search-fallback");
+        if (window.PagefindUI) {
+          new window.PagefindUI({
+            element: "#search",
+            showSubResults: true,
+            translations: {
+              placeholder: "搜索文章…",
+              clear_search: "清除",
+              load_more: "加载更多结果",
+              search_label: "搜索本站",
+              filters_label: "筛选",
+              zero_results: "没有找到与 [SEARCH_TERM] 相关的内容",
+              many_results: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的内容",
+              one_result: "找到 1 条与 [SEARCH_TERM] 相关的内容",
+              searching: "搜索中…",
+            },
+          });
+        } else {
+          fallback?.classList.remove("hidden");
+        }
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", mount);
+      } else {
+        mount();
+      }
+    })();
+  </script>
+</Layout>
+
