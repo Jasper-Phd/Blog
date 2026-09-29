@@ -17,7 +17,7 @@ export const SITE = {
 
   /** GitHub 用户名 / 仓库 */
   githubUser: "Jasper-Phd",
-  repo: "Jasper-Phd/Jasper-Phd.github.io",
+  repo: "Jasper-Phd/Blog",
 
   /** 首页每页显示几篇文章 */
   postsPerPage: 8,
@@ -41,11 +41,11 @@ export const SITE = {
    * 开启步骤见 README「开启评论」一节，把 enabled 改成 true 并填好两个 id 即可。
    */
   giscus: {
-    enabled: false,
-    repo: "Jasper-Phd/Jasper-Phd.github.io",
-    repoId: "",
+    enabled: true,
+    repo: "Jasper-Phd/Blog",
+    repoId: "R_kgDOUxd9vA",
     category: "Announcements",
-    categoryId: "",
+    categoryId: "DIC_kwDOUxd9vM4DGn3a",
     mapping: "pathname",
     reactionsEnabled: "1",
     inputPosition: "top",
