@@ -1,5 +1,6 @@
 ---
 import { SITE } from "../config";
+import T from "./T.astro";
 
 const { giscus } = SITE;
 const dev = import.meta.env.DEV;
@@ -9,7 +10,9 @@ const ready = giscus.enabled && giscus.repoId && giscus.categoryId;
 {
   ready && (
     <section class="mt-14">
-      <h2 class="mb-4 text-[1.0625rem] font-semibold">评论</h2>
+      <h2 class="mb-4 text-[1.0625rem] font-semibold">
+        <T zh="评论" en="Comments" />
+      </h2>
       <div class="surface overflow-hidden p-2">
         <script
           is:inline
@@ -42,4 +45,3 @@ const ready = giscus.enabled && giscus.repoId && giscus.categoryId;
     </section>
   )
 }
-

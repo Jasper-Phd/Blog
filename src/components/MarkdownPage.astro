@@ -1,0 +1,38 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import T from "./T.astro";
+
+interface Props {
+  /** src/content/pages/ 下的文件名 */
+  id: string;
+  zh: string;
+  en: string;
+  description?: string;
+}
+
+const { id, zh, en, description } = Astro.props;
+const entry = await getEntry("pages", id);
+const rendered = entry ? await render(entry) : null;
+const Content = rendered?.Content;
+const headings = rendered?.headings ?? [];
+---
+
+<Layout title={zh} description={description} toc={headings}>
+  <h1 class="page-title m-0 mb-8">
+    <T zh={zh} en={en} />
+  </h1>
+
+  {
+    Content ? (
+      <div class="article">
+        <Content />
+      </div>
+    ) : (
+      <p class="muted">
+        还没有内容。编辑 <code>src/content/pages/{id}.md</code> 即可。
+      </p>
+    )
+  }
+</Layout>
+

@@ -1,6 +1,7 @@
 ---
 import type { Page } from "astro";
 import type { Post } from "../utils";
+import T from "./T.astro";
 
 interface Props {
   page: Page<Post>;
@@ -14,25 +15,26 @@ const urlNext = url.next;
 {
   lastPage > 1 && (
     <nav
-      class="mt-8 flex items-center justify-between gap-3 border-t pt-6"
+      class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t pt-6"
       style="border-color: var(--border);"
       aria-label="分页导航"
     >
       {urlPrev ? (
         <a href={urlPrev} class="btn">
-          ← 上一页
+          ← <T zh="上一页" en="Previous" />
         </a>
       ) : (
         <span></span>
       )}
 
       <span class="muted text-[0.8125rem]">
-        第 {currentPage} / {lastPage} 页
+        <span class="lang-zh">第 {currentPage} / {lastPage} 页</span>
+        <span class="lang-en">Page {currentPage} / {lastPage}</span>
       </span>
 
       {urlNext ? (
         <a href={urlNext} class="btn">
-          下一页 →
+          <T zh="下一页" en="Next" /> →
         </a>
       ) : (
         <span></span>

@@ -1,0 +1,51 @@
+---
+import { Image } from "astro:assets";
+import T from "../components/T.astro";
+import Layout from "../layouts/Layout.astro";
+
+// 把图片放进 src/assets/gallery/，构建时会自动压缩并出现在这里
+const modules = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/gallery/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true },
+);
+
+const images = Object.entries(modules)
+  .map(([path, mod]) => ({
+    src: mod.default,
+    name: path.split("/").pop()?.replace(/\.[^.]+$/, "") ?? "",
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<Layout title="展示廊" description="图片展示">
+  <h1 class="page-title m-0 mb-3">
+    <T zh="展示廊" en="Gallery" />
+  </h1>
+  <p class="muted m-0 mb-8 text-[0.9375rem]">
+    <T zh="收录一些照片与图片。" en="A collection of photos and images." />
+  </p>
+
+  {
+    images.length > 0 ? (
+      <ul class="gallery-grid">
+        {images.map((image) => (
+          <li>
+            <Image
+              src={image.src}
+              alt={image.name}
+              widths={[400, 800]}
+              sizes="(max-width: 640px) 100vw, 320px"
+              loading="lazy"
+            />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="muted text-[0.9375rem]">
+        还没有图片。把图片放进 <code>src/assets/gallery/</code>
+        目录，构建时会自动压缩并出现在这里。
+      </p>
+    )
+  }
+</Layout>
+

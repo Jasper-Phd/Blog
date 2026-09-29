@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { SITE } from "../../config";
 import Layout from "../../layouts/Layout.astro";
 import { categoryUrl, getUniqueCategories, postFilter } from "../../utils";
+import T from "../../components/T.astro";
 
 const posts = await getCollection("posts", postFilter);
 const categories = getUniqueCategories(posts);
@@ -10,8 +11,13 @@ const categories = getUniqueCategories(posts);
 
 <Layout title="分类" description={`${SITE.title} 的全部分类`}>
   <header class="mb-8">
-    <h1 class="page-title m-0">分类</h1>
-    <p class="muted m-0 mt-2 text-[0.9375rem]">共 {categories.length} 个分类</p>
+    <h1 class="page-title m-0"><T zh="分类" en="Categories" /></h1>
+    <p class="muted m-0 mt-2 text-[0.9375rem]">
+      <T
+        zh={`共 ${categories.length} 个分类`}
+        en={`${categories.length} categories in total`}
+      />
+    </p>
   </header>
 
   <ul class="m-0 flex list-none flex-col gap-3 p-0">
@@ -30,4 +36,3 @@ const categories = getUniqueCategories(posts);
     }
   </ul>
 </Layout>
-

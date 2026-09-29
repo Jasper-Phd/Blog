@@ -1,28 +1,7 @@
 ---
-import { getEntry, render } from "astro:content";
+import MarkdownPage from "../components/MarkdownPage.astro";
 import { SITE } from "../config";
-import Layout from "../layouts/Layout.astro";
-
-const entry = await getEntry("pages", "about");
-const rendered = entry ? await render(entry) : null;
-const Content = rendered?.Content;
-const headings = rendered?.headings ?? [];
 ---
 
-<Layout title="关于" description={`关于 ${SITE.author}`} toc={headings}>
-  <div class="mx-auto max-w-3xl">
-    <h1 class="page-title m-0 mb-8">关于</h1>
+<MarkdownPage id="about" zh="关于" en="About" description={`关于 ${SITE.author}`} />
 
-    {
-      Content ? (
-        <div class="article">
-          <Content />
-        </div>
-      ) : (
-        <p class="muted">
-          还没有「关于」页面。编辑 <code>src/content/pages/about.md</code> 即可。
-        </p>
-      )
-    }
-  </div>
-</Layout>

@@ -22,7 +22,7 @@ const { title, description, ogType, publishedTime, noindex, toc } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={SITE.lang}>
+<html lang={SITE.lang} data-lang="zh">
   <head>
     <BaseHead
       title={title}
@@ -40,6 +40,19 @@ const { title, description, ogType, publishedTime, noindex, toc } = Astro.props;
           document.documentElement.dataset.theme = stored ?? (prefersDark ? "dark" : "light");
         } catch {
           document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <script is:inline>
+      // 尽早决定语言，避免切换前的闪烁
+      (() => {
+        try {
+          const stored = localStorage.getItem("lang");
+          if (stored === "en" || stored === "zh") {
+            document.documentElement.dataset.lang = stored;
+          }
+        } catch {
+          /* 隐私模式下忽略 */
         }
       })();
     </script>
@@ -62,9 +75,9 @@ const { title, description, ogType, publishedTime, noindex, toc } = Astro.props;
           <main id="main" data-pagefind-body>
             <slot />
           </main>
-        </div>
 
-        <Footer />
+          <Footer />
+        </div>
       </div>
     </div>
 
@@ -100,6 +113,19 @@ const { title, description, ogType, publishedTime, noindex, toc } = Astro.props;
             root.dataset.theme = next;
             try {
               localStorage.setItem("theme", next);
+            } catch {
+              /* 隐私模式下忽略 */
+            }
+          });
+        });
+
+        document.querySelectorAll("[data-lang-toggle]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const root = document.documentElement;
+            const next = root.dataset.lang === "en" ? "zh" : "en";
+            root.dataset.lang = next;
+            try {
+              localStorage.setItem("lang", next);
             } catch {
               /* 隐私模式下忽略 */
             }

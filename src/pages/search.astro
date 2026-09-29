@@ -1,4 +1,5 @@
 ---
+import T from "../components/T.astro";
 import Layout from "../layouts/Layout.astro";
 
 const bundlePath = `${import.meta.env.BASE_URL}pagefind/`;
@@ -7,14 +8,21 @@ const basePath = import.meta.env.BASE_URL;
 
 <Layout title="搜索" description="站内全文搜索">
   <div class="mx-auto max-w-2xl">
-    <h1 class="page-title m-0 mb-2">搜索</h1>
-    <p class="muted mt-0 mb-6 text-[0.9375rem]">输入关键词，全文检索本站所有文章。</p>
+    <h1 class="page-title m-0 mb-2"><T zh="搜索" en="Search" /></h1>
+    <p class="muted mt-0 mb-6 text-[0.9375rem]">
+      <T
+        zh="输入关键词，全文检索本站所有文章。"
+        en="Type a keyword to search across all posts."
+      />
+    </p>
 
     <div id="search" data-bundle-path={bundlePath} data-base-path={basePath}></div>
 
     <p id="search-fallback" class="muted mt-4 hidden text-[0.875rem]">
-      搜索索引在正式构建时生成。本地想试：先跑 <code>npm run build</code>，再跑
-      <code>npm run preview</code>。
+      <T
+        zh="搜索索引在正式构建时生成。本地想试：先跑 npm run build，再跑 npm run preview。"
+        en="The search index is built at production build time. To try it locally, run npm run build then npm run preview."
+      />
     </p>
   </div>
 
@@ -27,6 +35,31 @@ const basePath = import.meta.env.BASE_URL;
         const fallback = document.getElementById("search-fallback");
         if (window.PagefindUI && host) {
           const base = host.dataset.basePath || "/";
+          const lang = document.documentElement.dataset.lang === "en" ? "en" : "zh";
+          const dict = {
+            zh: {
+              placeholder: "搜索文章…",
+              clear_search: "清除",
+              load_more: "加载更多结果",
+              search_label: "搜索本站",
+              filters_label: "筛选",
+              zero_results: "没有找到与 [SEARCH_TERM] 相关的内容",
+              many_results: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的内容",
+              one_result: "找到 1 条与 [SEARCH_TERM] 相关的内容",
+              searching: "搜索中…",
+            },
+            en: {
+              placeholder: "Search posts…",
+              clear_search: "Clear",
+              load_more: "Load more results",
+              search_label: "Search this site",
+              filters_label: "Filters",
+              zero_results: "No results for [SEARCH_TERM]",
+              many_results: "[COUNT] results for [SEARCH_TERM]",
+              one_result: "1 result for [SEARCH_TERM]",
+              searching: "Searching…",
+            },
+          };
           new window.PagefindUI({
             element: "#search",
             bundlePath: host.dataset.bundlePath,
@@ -38,17 +71,7 @@ const basePath = import.meta.env.BASE_URL;
               const url = target.startsWith(base) ? target : base + target.replace(/^\//, "");
               return { ...result, url };
             },
-            translations: {
-              placeholder: "搜索文章…",
-              clear_search: "清除",
-              load_more: "加载更多结果",
-              search_label: "搜索本站",
-              filters_label: "筛选",
-              zero_results: "没有找到与 [SEARCH_TERM] 相关的内容",
-              many_results: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的内容",
-              one_result: "找到 1 条与 [SEARCH_TERM] 相关的内容",
-              searching: "搜索中…",
-            },
+            translations: dict[lang],
           });
         } else {
           fallback?.classList.remove("hidden");

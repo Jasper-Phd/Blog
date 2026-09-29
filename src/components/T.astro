@@ -1,0 +1,14 @@
+---
+/**
+ * 双语文本。中英文各渲染一份，靠 html[data-lang] 决定显示哪一个，
+ * 因此切换语言不需要重新加载页面，也不会有闪烁。
+ */
+interface Props {
+  zh: string;
+  en: string;
+}
+const { zh, en } = Astro.props;
+---
+
+<span class="lang-zh">{zh}</span><span class="lang-en">{en}</span>
+

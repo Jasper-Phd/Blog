@@ -11,6 +11,7 @@ import {
   sortByPubDate,
   type Post,
 } from "../../utils";
+import T from "../../components/T.astro";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getCollection("posts", postFilter);
@@ -33,10 +34,12 @@ const { category, posts } = Astro.props as { category: string; posts: Post[] };
       href={href("/categories/")}
       class="muted text-[0.8125rem] transition-colors hover:text-[var(--accent)]"
     >
-      ← 全部分类
+      ← <T zh="全部分类" en="All categories" />
     </a>
     <h1 class="page-title m-0 mt-3">{category}</h1>
-    <p class="muted m-0 mt-2 text-[0.9375rem]">{posts.length} 篇文章</p>
+    <p class="muted m-0 mt-2 text-[0.9375rem]">
+      <T zh={`${posts.length} 篇文章`} en={`${posts.length} posts`} />
+    </p>
   </header>
 
   <div class="post-list">

@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import FormattedDate from "../components/FormattedDate.astro";
 import Layout from "../layouts/Layout.astro";
 import { groupByYear, postFilter, postUrl, sortByPubDate } from "../utils";
+import T from "../components/T.astro";
 
 const posts = (await getCollection("posts", postFilter)).sort(sortByPubDate);
 const groups = groupByYear(posts);
@@ -15,8 +16,10 @@ const yearToc = groups.map(([year]) => ({
 
 <Layout title="归档" description="按年份浏览全部文章" toc={yearToc}>
   <header class="mb-8">
-    <h1 class="page-title m-0">归档</h1>
-    <p class="muted mt-2 mb-0 text-[0.9375rem]">共 {posts.length} 篇文章</p>
+    <h1 class="page-title m-0"><T zh="归档" en="Archive" /></h1>
+    <p class="muted mt-2 mb-0 text-[0.9375rem]">
+      <T zh={`共 ${posts.length} 篇文章`} en={`${posts.length} posts in total`} />
+    </p>
   </header>
 
   <div class="flex flex-col gap-10">
@@ -28,7 +31,9 @@ const yearToc = groups.map(([year]) => ({
             class="m-0 mb-4 flex items-baseline gap-3 text-[1.25rem] font-semibold tracking-tight"
           >
             {year}
-            <span class="muted text-[0.8125rem] font-normal">{list.length} 篇</span>
+            <span class="muted text-[0.8125rem] font-normal">
+              <T zh={`${list.length} 篇`} en={`${list.length}`} />
+            </span>
           </h2>
           <ul class="m-0 list-none space-y-2.5 p-0">
             {list.map((post) => (

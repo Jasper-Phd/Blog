@@ -27,11 +27,14 @@ export const SITE = {
 
   /** 侧边栏导航 */
   nav: [
-    { text: "首页", href: "/", icon: "home" },
-    { text: "分类", href: "/categories/", icon: "folder" },
-    { text: "标签", href: "/tags/", icon: "tag" },
-    { text: "归档", href: "/archives/", icon: "archive" },
-    { text: "关于", href: "/about/", icon: "user" },
+    { href: "/", zh: "首页", en: "Home", icon: "home" },
+    { href: "/categories/", zh: "分类", en: "Categories", icon: "folder" },
+    { href: "/archives/", zh: "归档", en: "Archive", icon: "archive" },
+    { href: "/tags/", zh: "标签", en: "Tags", icon: "tag" },
+    { href: "/academic/", zh: "学术", en: "Academics", icon: "academic" },
+    { href: "/resources/", zh: "资源", en: "Resources", icon: "resources" },
+    { href: "/gallery/", zh: "展示廊", en: "Gallery", icon: "gallery" },
+    { href: "/about/", zh: "关于", en: "About", icon: "user" },
   ],
 
   /**

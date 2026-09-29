@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import photo from "../assets/photo.jpg";
 import { SITE } from "../config";
+import T from "./T.astro";
 import {
   getUniqueCategories,
   getUniqueTags,
@@ -22,9 +23,14 @@ const tocItems = toc.filter((item) => item.depth <= 3);
 const posts = await getCollection("posts", postFilter);
 
 const stats = [
-  { label: "文章", value: posts.length, url: href("/archives/") },
-  { label: "分类", value: getUniqueCategories(posts).length, url: href("/categories/") },
-  { label: "标签", value: getUniqueTags(posts).length, url: href("/tags/") },
+  { zh: "文章", en: "Posts", value: posts.length, url: href("/archives/") },
+  {
+    zh: "分类",
+    en: "Categories",
+    value: getUniqueCategories(posts).length,
+    url: href("/categories/"),
+  },
+  { zh: "标签", en: "Tags", value: getUniqueTags(posts).length, url: href("/tags/") },
 ];
 
 const pathname = Astro.url.pathname;
@@ -60,6 +66,19 @@ const navIcons: Record<string, string[]> = {
     "M10.5 13.5a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1",
     "M13.5 10.5a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1",
   ],
+  academic: [
+    "M12 4 2.6 8.6 12 13.2l9.4-4.6z",
+    "M6.2 11v4.4c0 1.4 2.6 2.6 5.8 2.6s5.8-1.2 5.8-2.6V11",
+  ],
+  resources: [
+    "M4 5.6A1.6 1.6 0 0 1 5.6 4H11v16H5.6A1.6 1.6 0 0 1 4 18.4z",
+    "M11 4h7.4A1.6 1.6 0 0 1 20 5.6v12.8a1.6 1.6 0 0 1-1.6 1.6H11z",
+  ],
+  gallery: [
+    "M3.5 6.5A2 2 0 0 1 5.5 4.5h13a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z",
+    "M9.2 10.4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z",
+    "m4 17.5 4.8-4.3 3.4 2.9 2.9-2.4 4.9 3.8",
+  ],
 };
 ---
 
@@ -92,7 +111,7 @@ const navIcons: Record<string, string[]> = {
   </div>
 
   <nav class="mt-4" aria-label="主导航">
-    <ul class="m-0 flex list-none flex-col gap-0.5 p-0">
+    <ul class="m-0 flex list-none flex-col gap-0 p-0">
       {
         SITE.nav.map((item) => {
           const paths = navIcons[item.icon] ?? [];
@@ -124,7 +143,7 @@ const navIcons: Record<string, string[]> = {
                 ) : (
                   <span class="dot" aria-hidden="true" />
                 )}
-                <span>{item.text}</span>
+                <T zh={item.zh} en={item.en} />
               </a>
             </li>
           );
@@ -164,7 +183,7 @@ const navIcons: Record<string, string[]> = {
         <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
         <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
       </svg>
-      统计
+      <T zh="统计" en="Statistics" />
     </h2>
     <ul class="m-0 grid list-none grid-cols-3 gap-2 p-0">
       {
@@ -172,7 +191,9 @@ const navIcons: Record<string, string[]> = {
           <li>
             <a href={item.url} class="stat">
               <span class="stat-num">{item.value}</span>
-              <span class="stat-label">{item.label}</span>
+              <span class="stat-label">
+                <T zh={item.zh} en={item.en} />
+              </span>
             </a>
           </li>
         ))
@@ -197,7 +218,7 @@ const navIcons: Record<string, string[]> = {
           >
             <path d="M4 6h16M4 12h10M4 18h13"></path>
           </svg>
-          目录
+          <T zh="目录" en="Contents" />
         </h2>
         <nav class="sidebar-toc" aria-label="本页目录">
           <ul class="m-0 list-none p-0">
@@ -228,7 +249,7 @@ const navIcons: Record<string, string[]> = {
         <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
         <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
       </svg>
-      联系方式
+      <T zh="联系方式" en="Contact" />
     </h2>
     <div class="flex flex-col gap-2">
       <a href={`mailto:${SITE.email}`} class="contact-link">
@@ -311,7 +332,7 @@ const navIcons: Record<string, string[]> = {
             <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
             <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
           </svg>
-          友链
+          <T zh="友链" en="Friends" />
         </h2>
         <ul class="m-0 list-none p-0">
           {SITE.friends.map((friend) => (
@@ -378,6 +399,16 @@ const navIcons: Record<string, string[]> = {
           d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"
         ></path>
       </svg>
+    </button>
+
+    <button
+      type="button"
+      class="icon-btn"
+      data-lang-toggle
+      aria-label="切换语言 / Switch language"
+    >
+      <span class="lang-zh text-[0.6875rem] font-semibold tracking-wide">EN</span>
+      <span class="lang-en text-[0.6875rem] font-semibold tracking-wide">中</span>
     </button>
 
     <a href={href("/rss.xml")} class="icon-btn" aria-label="RSS 订阅">

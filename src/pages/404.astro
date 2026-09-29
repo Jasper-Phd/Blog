@@ -1,16 +1,24 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { href } from "../utils";
+import T from "../components/T.astro";
 ---
 
 <Layout title="页面未找到" noindex>
   <div class="mx-auto max-w-xl py-16 text-center">
     <p class="accent-text m-0 font-mono text-[3rem] font-bold leading-none">404</p>
-    <h1 class="m-0 mt-4 text-[1.5rem] font-semibold tracking-tight">这个页面不存在</h1>
-    <p class="muted mt-3">链接可能已经失效，或者文章被移动到别处了。</p>
+    <h1 class="m-0 mt-4 text-[1.5rem] font-semibold tracking-tight">
+      <T zh="这个页面不存在" en="This page doesn't exist" />
+    </h1>
+    <p class="muted mt-3">
+      <T
+        zh="链接可能已经失效，或者文章被移动到别处了。"
+        en="The link may be broken, or the post may have moved elsewhere."
+      />
+    </p>
     <div class="mt-8 flex justify-center gap-3">
-      <a href={href("/")} class="btn">回到首页</a>
-      <a href={href("/search/")} class="btn">搜索文章</a>
+      <a href={href("/")} class="btn"><T zh="回到首页" en="Home" /></a>
+      <a href={href("/search/")} class="btn"><T zh="搜索文章" en="Search" /></a>
     </div>
   </div>
 </Layout>
