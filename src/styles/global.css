@@ -285,7 +285,7 @@ body {
 
 /* 左侧栏拆成上下两块 */
 .sidebar-block {
-  padding: 1.1rem;
+  padding: 1rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -297,14 +297,14 @@ body {
 }
 
 .sidebar-header {
-  padding-bottom: 1.15rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--border);
   text-align: center;
 }
 
 .sidebar-sprig {
   display: block;
-  margin: 0.85rem auto 0;
+  margin: 0.55rem auto 0;
   color: var(--accent);
   opacity: 0.7;
 }
@@ -367,7 +367,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.45rem 0.6rem;
+  padding: 0.4rem 0.6rem;
   font-size: 0.9375rem;
   color: var(--fg-soft);
   border-radius: var(--radius-sm);
@@ -423,8 +423,8 @@ body {
 
 .avatar {
   display: block;
-  width: 6.5rem;
-  height: 6.5rem;
+  width: 5.5rem;
+  height: 5.5rem;
   object-fit: cover;
   margin: 0 auto;
   border-radius: 50%;
@@ -443,7 +443,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 0.05rem;
-  padding: 0.5rem 0.25rem;
+  padding: 0.45rem 0.25rem;
   background: var(--bg-soft);
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
@@ -478,7 +478,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.5rem 0.7rem;
+  padding: 0.45rem 0.7rem;
   font-size: 0.875rem;
   color: var(--fg-soft);
   background: var(--surface);
@@ -522,9 +522,20 @@ body {
 /* 宽屏：固定在左侧；窄屏：抽屉式侧栏 */
 @media (min-width: 1024px) {
   .sidebar {
+    position: sticky;
+    top: 2rem;
     align-self: flex-start;
     width: 18rem;
     flex-shrink: 0;
+    /* 内容比屏幕高时允许栏内滚动，但不显示滚动条 */
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
 }
 
