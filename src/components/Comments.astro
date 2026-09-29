@@ -9,7 +9,7 @@ const ready = giscus.enabled && giscus.repoId && giscus.categoryId;
 
 {
   ready && (
-    <section class="mt-14">
+    <section class="mt-12">
       <h2 class="mb-4 text-[1.0625rem] font-semibold">
         <T zh="评论" en="Comments" />
       </h2>
@@ -39,7 +39,7 @@ const ready = giscus.enabled && giscus.repoId && giscus.categoryId;
 
 {
   dev && !ready && (
-    <section class="muted mt-14 text-[0.8125rem]">
+    <section class="muted mt-12 text-[0.8125rem]">
       评论区尚未开启。在 <code>src/config.ts</code> 的 <code>giscus</code> 里填入 repoId 与
       categoryId 即可（步骤见 README）。
     </section>

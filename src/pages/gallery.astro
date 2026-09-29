@@ -41,11 +41,31 @@ const images = Object.entries(modules)
         ))}
       </ul>
     ) : (
-      <p class="muted text-[0.9375rem]">
-        还没有图片。把图片放进 <code>src/assets/gallery/</code>
-        目录，构建时会自动压缩并出现在这里。
-      </p>
+      <div class="empty-state">
+        <svg width="56" height="56" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect
+            x="5"
+            y="9"
+            width="38"
+            height="30"
+            rx="5"
+            stroke="currentColor"
+            stroke-width="1.6"></rect>
+          <circle cx="16" cy="19" r="2.8" stroke="currentColor" stroke-width="1.6"></circle>
+          <path
+            d="M7 34l10-8 6 5 5-4 13 9"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        <p>
+          <T
+            zh="这里还空着。把图片放进 src/assets/gallery/ 目录，构建时会自动压缩并出现在这里。"
+            en="Nothing here yet. Drop images into src/assets/gallery/ and they will be optimised and shown here."
+          />
+        </p>
+      </div>
     )
   }
 </Layout>
-

@@ -84,7 +84,7 @@ const navIcons: Record<string, string[]> = {
 
 <aside class="sidebar" id="sidebar" aria-label="站点导航与信息">
   <!-- 上块：身份区 + 导航 -->
-  <div class="sidebar-block">
+  <div class="sidebar-block sidebar-block--tint">
   <div class="sidebar-header">
     <a href={href("/")} class="sidebar-brand">{SITE.title}</a>
     <p class="sidebar-author">{SITE.author}</p>
@@ -167,7 +167,7 @@ const navIcons: Record<string, string[]> = {
     />
   </div>
 
-  <section class="mt-5">
+  <section class="mt-6">
     <h2 class="leaf-heading">
       <svg
         width="13"
@@ -203,7 +203,7 @@ const navIcons: Record<string, string[]> = {
 
   {
     tocItems.length > 1 && (
-      <section class="mt-5">
+      <section class="mt-6">
         <h2 class="leaf-heading">
           <svg
             width="13"
@@ -233,7 +233,7 @@ const navIcons: Record<string, string[]> = {
     )
   }
 
-  <section class="mt-5">
+  <section class="mt-6">
     <h2 class="leaf-heading">
       <svg
         width="13"
@@ -316,7 +316,7 @@ const navIcons: Record<string, string[]> = {
 
   {
     SITE.friends.length > 0 && (
-      <section class="mt-5">
+      <section class="mt-6">
         <h2 class="leaf-heading">
           <svg
             width="13"
@@ -352,7 +352,7 @@ const navIcons: Record<string, string[]> = {
     )
   }
 
-  <div class="mt-5 flex items-center gap-2 border-t pt-4" style="border-color: var(--border);">
+  <div class="mt-6 flex items-center gap-2 border-t pt-4" style="border-color: var(--border);">
     <a href={href("/search/")} class="icon-btn" aria-label="搜索文章">
       <svg
         width="16"
