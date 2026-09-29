@@ -67,12 +67,13 @@ git push
 
 ## 部署
 
-### 方式一：GitHub Pages（已配置好）
+### 方式一：GitHub Pages（已启用并部署）
 
-1. 推送代码到 `main` 分支
-2. 进入仓库 **Settings → Pages**，把 Source 改成 **GitHub Actions**
+仓库 `Jasper-Phd/Blog` 已完成首次配置：**Settings → Pages → Source 已设为 GitHub Actions**。之后只要推送代码到 `main` 分支，就会自动构建发布。
 
-之后每次推送都会自动构建发布，地址是 <https://jasper-phd.github.io/Blog/>。
+线上地址：<https://jasper-phd.github.io/Blog/>
+
+> 注意：首次启用 Pages 必须由仓库管理员在设置里手动操作一次，流水线里的临时凭证没有这个权限。
 
 ### 想要更短的网址
 
@@ -93,12 +94,20 @@ const BASE_PATH = process.env.BASE_PATH ?? "/";
 
 换域名后记得同步修改 `astro.config.mjs` 里的 `SITE_URL` 和 `src/config.ts` 里的 `website`。robots、sitemap、RSS 都会自动跟着变。
 
-## 开启评论（Giscus）
+## 评论（已启用 Giscus）
 
-1. 仓库必须是公开的，并在 **Settings → General → Features** 里勾选 **Discussions**
-2. 新建一个 Discussions 分类，例如 `Announcements`
-3. 打开 <https://giscus.app>，填入仓库名，复制生成的 `data-repo-id` 与 `data-category-id`
-4. 填到 `src/config.ts` 的 `giscus` 里，并把 `enabled` 改成 `true`
+评论区已经接好，配置在 `src/config.ts` 的 `giscus` 字段里：
+
+| 字段 | 当前值 |
+| --- | --- |
+| `repo` | `Jasper-Phd/Blog` |
+| `repoId` | `R_kgDOUxd9vA` |
+| `category` | `Announcements` |
+| `categoryId` | `DIC_kwDOUxd9vM4DGn3a` |
+
+评论数据存在你仓库的 Discussions 里。**某个页面第一次有人留言或添加表情时，才会为它创建对应的讨论**，所以在此之前 giscus 会在控制台提示 “Discussion not found”，这是正常的。
+
+想换分类或换仓库，改这几个字段即可。换分类时注意：giscus 只支持 **Announcements 类型**的分类，因为只有它允许应用代替访客创建讨论。
 
 > 提示：Giscus 依赖 GitHub 登录，中国大陆访问可能较慢。介意的可以换成 Waline 或 Twikoo。
 
