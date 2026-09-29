@@ -43,13 +43,15 @@ const { title, description, ogType, publishedTime, noindex } = Astro.props;
   </head>
 
   <body class="min-h-screen">
+    <div class="page-texture" aria-hidden="true"></div>
+
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-[var(--accent)] focus:px-3 focus:py-2 focus:text-[var(--accent-fg)]"
       >跳到正文</a
     >
 
-    <div class="mx-auto flex w-full max-w-[1200px] gap-10 px-5 py-8">
+    <div class="page-shell mx-auto flex w-full max-w-[1200px] gap-10 px-5 py-8">
       <Sidebar />
 
       <div class="flex min-w-0 flex-1 flex-col">

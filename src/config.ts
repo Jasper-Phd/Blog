@@ -22,8 +22,8 @@ export const SITE = {
   /** 侧边栏「联系方式」里显示的邮箱 */
   email: "jasperli.phd@gmail.com",
 
-  /** 首页每页显示几篇文章 */
-  postsPerPage: 8,
+  /** 列表每页显示几篇文章 */
+  postsPerPage: 3,
 
   /** 侧边栏导航 */
   nav: [

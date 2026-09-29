@@ -2,7 +2,7 @@
 import type { GetStaticPaths, Page } from "astro";
 import { getCollection } from "astro:content";
 import Pagination from "../components/Pagination.astro";
-import PostCard from "../components/PostCard.astro";
+import PostListItem from "../components/PostListItem.astro";
 import { SITE } from "../config";
 import Layout from "../layouts/Layout.astro";
 import { postFilter, sortByPubDate, type Post } from "../utils";
@@ -13,16 +13,12 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 };
 
 const { page } = Astro.props as { page: Page<Post> };
-
 const isFirstPage = page.currentPage === 1;
-const featured = isFirstPage ? page.data.filter((post) => post.data.featured).slice(0, 3) : [];
-const featuredIds = new Set(featured.map((post) => post.id));
-const rest = page.data.filter((post) => !featuredIds.has(post.id));
 ---
 
 <Layout>
-  <section class="mb-10 border-b pb-8" style="border-color: var(--border);">
-    <h1 class="m-0 text-[1.75rem] font-bold leading-tight tracking-tight">
+  <section class="mb-7 border-b pb-6" style="border-color: var(--border);">
+    <h1 class="m-0 text-[1.6rem] font-bold leading-tight tracking-tight">
       {isFirstPage ? "最新文章" : `第 ${page.currentPage} 页`}
     </h1>
     {
@@ -35,33 +31,19 @@ const rest = page.data.filter((post) => !featuredIds.has(post.id));
   </section>
 
   {
-    featured.length > 0 && (
-      <section class="mb-10">
-        <h2 class="sidebar-heading">精选</h2>
-        <div class="grid gap-4 sm:grid-cols-2">
-          {featured.map((post) => (
-            <PostCard post={post} />
-          ))}
-        </div>
-      </section>
+    page.data.length > 0 ? (
+      <div class="post-list">
+        {page.data.map((post) => (
+          <PostListItem post={post} />
+        ))}
+      </div>
+    ) : (
+      <p class="muted text-[0.9375rem]">
+        还没有文章。在 <code>src/content/posts/</code> 里新建一个 Markdown 文件就能发布。
+      </p>
     )
   }
 
-  <section>
-    {
-      rest.length > 0 ? (
-        <div class="grid gap-4">
-          {rest.map((post) => (
-            <PostCard post={post} />
-          ))}
-        </div>
-      ) : (
-        <p class="muted text-[0.9375rem]">
-          还没有文章。在 <code>src/content/posts/</code> 里新建一个 Markdown 文件就能发布。
-        </p>
-      )
-    }
-  </section>
-
   <Pagination page={page} />
 </Layout>
+

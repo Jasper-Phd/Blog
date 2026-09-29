@@ -4,22 +4,38 @@
    1. 设计变量 —— 想换配色，只改这一段
    ============================================================ */
 :root {
-  --bg: #ffffff;
-  --bg-soft: #f6f6f4;
+  /* 底色与文字：偏青绿的纸感 */
+  --bg: #f7fbf5;
+  --bg-soft: #eef5ea;
   --surface: #ffffff;
-  --surface-strong: #fafaf9;
-  --fg: #131519;
-  --fg-soft: #43474e;
-  --fg-muted: #858b96;
-  --border: #e7e7e3;
-  --border-strong: #d5d5d0;
-  --accent: #0f7b6c;
+  --surface-strong: #f4f9f2;
+  --fg: #16241b;
+  --fg-soft: #3f5347;
+  --fg-muted: #7b8f82;
+  --border: #dfe9dc;
+  --border-strong: #c8d8c3;
+
+  /* 主色：森林绿 */
+  --accent: #2e7d4f;
   --accent-fg: #ffffff;
-  --accent-soft: #e8f4f1;
-  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
-  --shadow-md: 0 10px 30px -18px rgba(16, 24, 40, 0.35);
-  --radius: 14px;
-  --radius-sm: 9px;
+  --accent-soft: #e6f2e9;
+
+  /* 辅助色：暖阳 / 河水 / 花朵 */
+  --accent-2: #c08128;
+  --accent-2-soft: #fbf1e0;
+  --accent-3: #4a83a6;
+  --accent-3-soft: #e8f1f6;
+  --accent-4: #bf6a86;
+  --accent-4-soft: #fbeef2;
+
+  --leaf-tint: #cbe3d2;
+  --glow-1: rgba(46, 125, 79, 0.09);
+  --glow-2: rgba(192, 129, 40, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(22, 36, 27, 0.05);
+  --shadow-md: 0 12px 30px -20px rgba(22, 36, 27, 0.45);
+  --radius: 16px;
+  --radius-sm: 10px;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
     "Noto Sans CJK SC", sans-serif;
@@ -31,20 +47,33 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0d1015;
-  --bg-soft: #12161d;
-  --surface: #141922;
-  --surface-strong: #171d27;
-  --fg: #e9ebef;
-  --fg-soft: #b9bfca;
-  --fg-muted: #858d9c;
-  --border: #232a35;
-  --border-strong: #303947;
-  --accent: #46d1b3;
-  --accent-fg: #06231d;
-  --accent-soft: #123028;
+  --bg: #0c1310;
+  --bg-soft: #111a15;
+  --surface: #131d17;
+  --surface-strong: #16221b;
+  --fg: #e8efe9;
+  --fg-soft: #b3c3b8;
+  --fg-muted: #7f9186;
+  --border: #212f27;
+  --border-strong: #2d3f34;
+
+  --accent: #6ccb8f;
+  --accent-fg: #05210f;
+  --accent-soft: #14301f;
+
+  --accent-2: #e0b169;
+  --accent-2-soft: #2c2415;
+  --accent-3: #7fb4d4;
+  --accent-3-soft: #142630;
+  --accent-4: #e39ab2;
+  --accent-4-soft: #2c1a22;
+
+  --leaf-tint: #1a2a20;
+  --glow-1: rgba(108, 203, 143, 0.08);
+  --glow-2: rgba(224, 177, 105, 0.06);
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 14px 34px -20px rgba(0, 0, 0, 0.9);
+  --shadow-md: 0 16px 34px -22px rgba(0, 0, 0, 0.85);
   color-scheme: dark;
 }
 
@@ -59,6 +88,10 @@ html {
 body {
   margin: 0;
   background: var(--bg);
+  background-image:
+    radial-gradient(55rem 38rem at 10% -10%, var(--glow-1), transparent 70%),
+    radial-gradient(48rem 34rem at 105% 6%, var(--glow-2), transparent 65%);
+  background-attachment: fixed;
   color: var(--fg);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -244,10 +277,72 @@ body {
 /* ============================================================
    3.5 左侧栏
    ============================================================ */
+/* 页面底纹：用 SVG 做遮罩，颜色跟随主题 */
+.page-texture {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--leaf-tint);
+  -webkit-mask-image: url("/leaf-pattern.svg");
+  mask-image: url("/leaf-pattern.svg");
+  -webkit-mask-size: 260px 260px;
+  mask-size: 260px 260px;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .page-texture {
+  opacity: 0.7;
+}
+
+.page-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* 左侧栏拆成上下两块 */
+.sidebar-block {
+  padding: 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar-block + .sidebar-block {
+  margin-top: 1rem;
+}
+
 .sidebar-header {
   padding-bottom: 1.15rem;
   border-bottom: 1px solid var(--border);
   text-align: center;
+}
+
+.sidebar-sprig {
+  display: block;
+  margin: 0.85rem auto 0;
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+.leaf-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.leaf-heading svg {
+  flex-shrink: 0;
+  color: var(--accent);
 }
 
 .sidebar-brand {
@@ -502,6 +597,95 @@ body.drawer-open .sidebar-backdrop {
   .sidebar-backdrop {
     display: none;
   }
+}
+
+/* ============================================================
+   3.6 文章列表（连续排版，不用卡片）
+   ============================================================ */
+.post-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-item {
+  padding: 1.7rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-item:first-child {
+  padding-top: 0.2rem;
+}
+
+.post-item:last-child {
+  padding-bottom: 0.4rem;
+  border-bottom: 0;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--fg-muted);
+}
+
+.post-title {
+  margin: 0.55rem 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+}
+
+.post-title a {
+  color: var(--fg);
+  transition: color 0.16s ease;
+}
+
+.post-title a:hover {
+  color: var(--accent);
+}
+
+.post-excerpt {
+  margin: 0.6rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.85;
+  color: var(--fg-soft);
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.85rem;
+}
+
+.badge-featured {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--accent-2);
+  background: var(--accent-2-soft);
+  border-radius: 999px;
+}
+
+/* 小河：波浪分隔线 */
+.river-divider {
+  display: block;
+  width: 100%;
+  height: 24px;
+  margin: 1.5rem 0;
+  color: var(--accent-3);
+  opacity: 0.55;
+}
+
+.footer-scene {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  height: auto;
 }
 
 /* ============================================================

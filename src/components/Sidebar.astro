@@ -65,10 +65,31 @@ const navIcons: Record<string, string[]> = {
 ---
 
 <aside class="sidebar" id="sidebar" aria-label="站点导航与信息">
+  <!-- 上块：身份区 + 导航 -->
+  <div class="sidebar-block">
   <div class="sidebar-header">
     <a href={href("/")} class="sidebar-brand">{SITE.title}</a>
     <p class="sidebar-author">{SITE.author}</p>
     <p class="sidebar-tagline">{SITE.tagline}</p>
+    <svg
+      class="sidebar-sprig"
+      width="72"
+      height="18"
+      viewBox="0 0 72 18"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M4 12C20 4 52 4 68 12"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.1"
+        stroke-linecap="round"
+        opacity="0.6"></path>
+      <path d="M22 8C26 2 34 2 38 7C34 12 26 12 22 8Z" fill="currentColor" opacity="0.5"></path>
+      <path d="M40 6C44 1 52 1 55 6C51 11 43 11 40 6Z" fill="currentColor" opacity="0.38"></path>
+      <path d="M10 11C13 6 20 6 23 10C20 15 13 15 10 11Z" fill="currentColor" opacity="0.32"></path>
+    </svg>
   </div>
 
   <nav class="mt-5" aria-label="主导航">
@@ -112,8 +133,11 @@ const navIcons: Record<string, string[]> = {
       }
     </ul>
   </nav>
+  </div>
 
-  <div class="mt-7">
+  <!-- 下块：头像 / 统计 / 联系方式 / 友链 / 工具行 -->
+  <div class="sidebar-block">
+  <div>
     <img
       src={avatarSrc}
       alt={`${SITE.author} 的头像`}
@@ -125,8 +149,24 @@ const navIcons: Record<string, string[]> = {
     />
   </div>
 
-  <section class="mt-7">
-    <h2 class="sidebar-heading">统计</h2>
+  <section class="mt-6">
+    <h2 class="leaf-heading">
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+      </svg>
+      统计
+    </h2>
     <ul class="m-0 grid list-none grid-cols-3 gap-2 p-0">
       {
         stats.map((item) => (
@@ -141,8 +181,24 @@ const navIcons: Record<string, string[]> = {
     </ul>
   </section>
 
-  <section class="mt-7">
-    <h2 class="sidebar-heading">联系方式</h2>
+  <section class="mt-6">
+    <h2 class="leaf-heading">
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+      </svg>
+      联系方式
+    </h2>
     <div class="flex flex-col gap-2">
       <a href={`mailto:${SITE.email}`} class="contact-link">
         <svg
@@ -209,7 +265,23 @@ const navIcons: Record<string, string[]> = {
   {
     SITE.friends.length > 0 && (
       <section class="mt-7">
-        <h2 class="sidebar-heading">友链</h2>
+        <h2 class="leaf-heading">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+          </svg>
+          友链
+        </h2>
         <ul class="m-0 list-none p-0">
           {SITE.friends.map((friend) => (
             <li>
@@ -292,5 +364,6 @@ const navIcons: Record<string, string[]> = {
         <circle cx="5.5" cy="18.5" r="1.5" fill="currentColor" stroke="none"></circle>
       </svg>
     </a>
+  </div>
   </div>
 </aside>

@@ -1,0 +1,41 @@
+---
+import type { Post } from "../utils";
+import { excerpt, postUrl, readingTime, tagUrl } from "../utils";
+import FormattedDate from "./FormattedDate.astro";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDatetime, tags, featured } = post.data;
+const summary = excerpt(post.body, 150) || description;
+---
+
+<article class="post-item">
+  <div class="post-meta">
+    <FormattedDate date={pubDatetime} />
+    <span aria-hidden="true">·</span>
+    <span>约 {readingTime(post.body)} 分钟</span>
+    {featured && <span class="badge-featured">精选</span>}
+  </div>
+
+  <h3 class="post-title">
+    <a href={postUrl(post)}>{title}</a>
+  </h3>
+
+  {summary && <p class="post-excerpt">{summary}</p>}
+
+  {
+    tags.length > 0 && (
+      <div class="post-tags">
+        {tags.map((tag) => (
+          <a href={tagUrl(tag)} class="tag">
+            #{tag}
+          </a>
+        ))}
+      </div>
+    )
+  }
+</article>
+

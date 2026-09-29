@@ -54,6 +54,37 @@ export function readingTime(body = "") {
   return Math.max(1, Math.round(cjk / 350 + words / 220));
 }
 
+/** 从正文里截一段纯文本作为摘要，用于列表页展示部分内容 */
+export function excerpt(body = "", max = 150) {
+  const text = body
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    // 去掉整行标题，摘要里不重复出现小标题
+    .replace(/^[ \t]{0,3}#{1,6}[ \t]+.*$/gm, " ")
+    .replace(/^[ \t]{0,3}>\s?/gm, "")
+    .replace(/^[ \t]{0,3}([-*+]|\d+\.)\s+/gm, "")
+    .replace(/\$\$[\s\S]*?\$\$/g, " ")
+    .replace(/\$[^$\n]*\$/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`~]/g, "")
+    .replace(/\s+/g, " ")
+    .replace(/\s+([，。、；：！？）》」”])/g, "$1")
+    .trim();
+
+  if (text.length <= max) return text;
+
+  const cut = text.slice(0, max);
+  const stop = Math.max(
+    cut.lastIndexOf("。"),
+    cut.lastIndexOf("！"),
+    cut.lastIndexOf("？"),
+    cut.lastIndexOf("."),
+  );
+
+  return `${stop > max * 0.5 ? cut.slice(0, stop + 1) : cut}…`;
+}
+
 export function postUrl(post: Post) {
   return href(`/posts/${post.id}/`);
 }
