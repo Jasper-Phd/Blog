@@ -111,12 +111,28 @@ const BASE_PATH = process.env.BASE_PATH ?? "/仓库名";
 
 > 提示：Giscus 依赖 GitHub 登录，中国大陆访问可能较慢。介意的可以换成 Waline 或 Twikoo。
 
-## 开启访问统计
+## 访问统计
 
-1. 在 Cloudflare 控制台进入 **Web Analytics**，添加站点拿到 token
-2. 填入 `src/config.ts` 的 `analytics.cloudflareToken`
+站里接了两套，分工不同：
 
-免费、无 Cookie，不会弹出同意横幅。
+### 1. 页脚显示的访客数（不蒜子，已启用）
+
+页脚「本站已运行 N 天」后面会跟一个「访客 123」的数字，用来给读者看。用的是[不蒜子](https://busuanzi.ibruce.info)，免费、无需注册，代码在 `src/components/BaseHead.astro` 和 `Footer.astro` 里。
+
+原理是脚本请求一次 JSONP 接口，拿到 `site_uv`（站点独立访客）、`site_pv`（站点浏览量）、`page_pv`（当前页浏览量），再填进对应 id 的元素。想换成显示浏览量，把页脚里的 `busuanzi_container_site_uv` 改成 `busuanzi_container_site_pv` 即可。
+
+**注意**：数字在 `localhost` 下不会出现，这是正常的——不蒜子按域名计数，本地域名取不到数据。此时容器保持隐藏，页面不会出现空白或报错。
+
+**隐私提醒**：不蒜子需要把访问者 IP 发给它的服务器用于去重，数据不归你所有。介意的话把 `src/config.ts` 里的 `visitorCounter` 改成 `false`，脚本和数字会一起消失。
+
+### 2. 你自己的分析后台（Cloudflare，待配置）
+
+代码已经留好位置，只差一个 token：
+
+1. 注册 Cloudflare 账号（免费），进入 **Web Analytics** 添加站点，拿到 token
+2. 把 token 填进 `src/config.ts` 的 `analytics.cloudflareToken`
+
+填上之后会自动在页面里注入统计脚本。完全免费且不限量、无 Cookie、不采集个人数据，能看到每篇文章的访问量和来源。**数字只在 Cloudflare 后台看，页面上不显示**——这正是它和上面那套互补的地方。
 
 ## 个性化
 

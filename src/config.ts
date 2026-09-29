@@ -80,6 +80,12 @@ export const SITE = {
     cloudflareToken: "",
   },
 
+  /**
+   * 页脚显示的访客数（不蒜子）。免费、无需注册。
+   * 它会把访问者 IP 发给第三方用于去重，介意的话改成 false。
+   */
+  visitorCounter: true,
+
   /** 文章版权声明 */
   license: {
     name: "CC BY-NC-SA 4.0",

@@ -454,6 +454,11 @@ body {
   margin: 0 0.25em;
 }
 
+#busuanzi_value_site_uv {
+  margin-left: 0.25em;
+  font-variant-numeric: tabular-nums;
+}
+
 .sidebar-brand:hover {
   color: var(--accent);
 }

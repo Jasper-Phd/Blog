@@ -29,6 +29,17 @@ const siteAge = Math.max(
       <T zh="本站已运行" en="Running for" />
       <span id="site-age" data-since={SITE.since}>{siteAge}</span>
       <T zh="天" en="days" />
+      {
+        SITE.visitorCounter && (
+          <>
+            <span aria-hidden="true"> · </span>
+            <span id="busuanzi_container_site_uv" style="display:none">
+              <T zh="访客" en="Visitors" />
+              <span id="busuanzi_value_site_uv"></span>
+            </span>
+          </>
+        )
+      }
     </p>
     <div class="flex items-center gap-4">
       {
