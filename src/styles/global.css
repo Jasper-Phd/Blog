@@ -244,24 +244,35 @@ body {
 /* ============================================================
    3.5 左侧栏
    ============================================================ */
+.sidebar-header {
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
 .sidebar-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
   color: var(--fg);
+  transition: color 0.16s ease;
+}
+
+.sidebar-brand:hover {
+  color: var(--accent);
 }
 
 .sidebar-author {
-  margin: 0.15rem 0 0;
-  font-size: 0.875rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  letter-spacing: 0.03em;
   color: var(--fg-soft);
 }
 
 .sidebar-tagline {
-  margin: 0.3rem 0 0;
+  margin: 0.25rem 0 0;
   font-size: 0.75rem;
   letter-spacing: 0.02em;
   color: var(--fg-muted);
@@ -295,6 +306,21 @@ body {
   border-radius: 50%;
   background: var(--border-strong);
   transition: background 0.16s ease, transform 0.16s ease;
+}
+
+.sidebar-nav-link .nav-icon {
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.sidebar-nav-link:hover .nav-icon {
+  opacity: 1;
+  transform: translateX(1px);
+}
+
+.sidebar-nav-link[aria-current="page"] .nav-icon {
+  opacity: 1;
 }
 
 .sidebar-nav-link:hover {

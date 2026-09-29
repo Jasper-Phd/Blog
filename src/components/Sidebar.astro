@@ -36,35 +36,79 @@ const isCurrent = (target: string) => {
   return path === homePath ? pathname === homePath : pathname.startsWith(path);
 };
 
-const starPath =
-  "M16 4.5 L18.7 12.28 L26.94 12.45 L20.38 17.42 L22.76 25.3 L16 20.6 L9.24 25.3 L11.63 17.42 L5.06 12.45 L13.3 12.28 Z";
+/** 导航图标。想换图标就在 config.ts 的 nav 里改 icon 名字，可选值见这里。 */
+const navIcons: Record<string, string[]> = {
+  home: [
+    "M4 10.6 12 4.2l8 6.4V19a1.2 1.2 0 0 1-1.2 1.2h-3.6v-5.6H8.8v5.6H5.2A1.2 1.2 0 0 1 4 19z",
+  ],
+  folder: [
+    "M3.2 7.6A1.6 1.6 0 0 1 4.8 6h3.9l2 2.5h7.5a1.6 1.6 0 0 1 1.6 1.6v7.3a1.6 1.6 0 0 1-1.6 1.6H4.8a1.6 1.6 0 0 1-1.6-1.6z",
+  ],
+  tag: [
+    "M11.4 3.6H20.4V12.6l-8.2 8.2a1.8 1.8 0 0 1-2.5 0l-5.5-5.5a1.8 1.8 0 0 1 0-2.5z",
+    "M16.3 8.3h.01",
+  ],
+  archive: [
+    "M3.6 5.4h16.8a1 1 0 0 1 1 1v2.2a1 1 0 0 1-1 1H3.6a1 1 0 0 1-1-1V6.4a1 1 0 0 1 1-1z",
+    "M4.8 9.6v9a1 1 0 0 0 1 1h12.4a1 1 0 0 0 1-1v-9",
+    "M10 13.6h4",
+  ],
+  user: [
+    "M12 12.4a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2z",
+    "M5 20.6a7 7 0 0 1 14 0",
+  ],
+  link: [
+    "M10.5 13.5a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1",
+    "M13.5 10.5a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1",
+  ],
+};
 ---
 
 <aside class="sidebar" id="sidebar" aria-label="站点导航与信息">
-  <a href={href("/")} class="sidebar-brand">
-    <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true" class="shrink-0">
-      <path d={starPath} fill="var(--accent)"></path>
-    </svg>
-    <span>{SITE.title}</span>
-  </a>
-  <p class="sidebar-author">{SITE.author}</p>
-  <p class="sidebar-tagline">{SITE.tagline}</p>
+  <div class="sidebar-header">
+    <a href={href("/")} class="sidebar-brand">{SITE.title}</a>
+    <p class="sidebar-author">{SITE.author}</p>
+    <p class="sidebar-tagline">{SITE.tagline}</p>
+  </div>
 
   <nav class="mt-5" aria-label="主导航">
     <ul class="m-0 flex list-none flex-col gap-0.5 p-0">
       {
-        SITE.nav.map((item) => (
-          <li>
-            <a
-              href={href(item.href)}
-              class="sidebar-nav-link"
-              aria-current={isCurrent(item.href) ? "page" : undefined}
-            >
-              <span class="dot" aria-hidden="true" />
-              <span>{item.text}</span>
-            </a>
-          </li>
-        ))
+        SITE.nav.map((item) => {
+          const paths = navIcons[item.icon] ?? [];
+
+          return (
+            <li>
+              <a
+                href={href(item.href)}
+                class="sidebar-nav-link"
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+              >
+                {paths.length > 0 ? (
+                  <svg
+                    class="nav-icon"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    {paths.map((d) => (
+                      <path d={d} />
+                    ))}
+                  </svg>
+                ) : (
+                  <span class="dot" aria-hidden="true" />
+                )}
+                <span>{item.text}</span>
+              </a>
+            </li>
+          );
+        })
       }
     </ul>
   </nav>

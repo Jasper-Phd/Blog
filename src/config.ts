@@ -27,11 +27,11 @@ export const SITE = {
 
   /** 侧边栏导航 */
   nav: [
-    { text: "首页", href: "/" },
-    { text: "分类", href: "/categories/" },
-    { text: "标签", href: "/tags/" },
-    { text: "归档", href: "/archives/" },
-    { text: "关于", href: "/about/" },
+    { text: "首页", href: "/", icon: "home" },
+    { text: "分类", href: "/categories/", icon: "folder" },
+    { text: "标签", href: "/tags/", icon: "tag" },
+    { text: "归档", href: "/archives/", icon: "archive" },
+    { text: "关于", href: "/about/", icon: "user" },
   ],
 
   /**

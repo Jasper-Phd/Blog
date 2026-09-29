@@ -1,9 +1,6 @@
 ---
 import { SITE } from "../config";
 import { href } from "../utils";
-
-const starPath =
-  "M16 4.5 L18.7 12.28 L26.94 12.45 L20.38 17.42 L22.76 25.3 L16 20.6 L9.24 25.3 L11.63 17.42 L5.06 12.45 L13.3 12.28 Z";
 ---
 
 <!-- 窄屏顶栏：导航收进左侧抽屉，这里只保留菜单键、站名和常用操作 -->
@@ -34,9 +31,6 @@ const starPath =
   </button>
 
   <a href={href("/")} class="mr-auto flex items-center gap-2">
-    <svg width="20" height="20" viewBox="0 0 32 32" aria-hidden="true" class="shrink-0">
-      <path d={starPath} fill="var(--accent)"></path>
-    </svg>
     <span class="text-[1.0625rem] font-semibold tracking-tight">{SITE.title}</span>
   </a>
 
@@ -88,4 +82,3 @@ const starPath =
     </svg>
   </button>
 </div>
-
