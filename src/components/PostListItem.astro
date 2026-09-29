@@ -6,6 +6,7 @@ import {
   postUrl,
   readingTime,
   tagUrl,
+  transitionName,
   wordCount,
 } from "../utils";
 import FormattedDate from "./FormattedDate.astro";
@@ -25,7 +26,7 @@ const minutes = readingTime(post.body);
 ---
 
 <article class="post-item">
-  <h3 class="post-title">
+  <h3 class="post-title" style={`view-transition-name: ${transitionName(post.id)}`}>
     <a href={postUrl(post)}>{title}</a>
   </h3>
 

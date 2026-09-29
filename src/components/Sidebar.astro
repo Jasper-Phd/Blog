@@ -8,6 +8,7 @@ import {
   getUniqueCategories,
   getUniqueTags,
   href,
+  postUrl,
   postFilter,
   type TocEntry,
 } from "../utils";
@@ -32,6 +33,9 @@ const stats = [
   },
   { zh: "标签", en: "Tags", value: getUniqueTags(posts).length, url: href("/tags/") },
 ];
+
+/** 「随风」按钮随机跳转的候选列表 */
+const randomPool = posts.map((post) => postUrl(post)).join("|");
 
 const pathname = Astro.url.pathname;
 const homePath = href("/");
@@ -155,6 +159,30 @@ const navIcons: Record<string, string[]> = {
 
   <!-- 下块：头像 / 统计 / 联系方式 / 友链 / 工具行 -->
   <div class="sidebar-block">
+  <div id="resume-card" class="mb-4" hidden>
+    <h2 class="leaf-heading">
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 4.5h7a2 2 0 0 1 2 2v13a1.6 1.6 0 0 0-1.6-1.6H4z"></path>
+        <path d="M20 4.5h-5a2 2 0 0 0-2 2v13a1.6 1.6 0 0 1 1.6-1.6H20z"></path>
+      </svg>
+      <T zh="继续阅读" en="Continue" />
+    </h2>
+    <a id="resume-link" class="resume-link" href="#">
+      <span id="resume-title"></span>
+      <span id="resume-progress" class="resume-progress"></span>
+    </a>
+  </div>
+
   <div>
     <Image
       src={photo}
@@ -409,6 +437,29 @@ const navIcons: Record<string, string[]> = {
     >
       <span class="lang-zh text-[0.6875rem] font-semibold tracking-wide">EN</span>
       <span class="lang-en text-[0.6875rem] font-semibold tracking-wide">中</span>
+    </button>
+
+    <button
+      type="button"
+      class="icon-btn"
+      data-random-post={randomPool}
+      aria-label="随机读一篇 / Random post"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M3 8h9.5a3.2 3.2 0 1 0-3.2-3.2"></path>
+        <path d="M3 16h6.5"></path>
+        <path d="M3 12h14.5a3.2 3.2 0 1 1-3.2 3.2"></path>
+      </svg>
     </button>
 
     <a href={href("/rss.xml")} class="icon-btn" aria-label="RSS 订阅">

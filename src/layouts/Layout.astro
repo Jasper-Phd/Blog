@@ -85,52 +85,254 @@ const { title, description, ogType, publishedTime, noindex, toc } = Astro.props;
 
     <script is:inline>
       (() => {
-        const body = document.body;
-        const trigger = document.getElementById("menu-open");
-        const backdrop = document.getElementById("sidebar-backdrop");
-        const sidebar = document.getElementById("sidebar");
-
-        const setOpen = (open) => {
-          body.classList.toggle("drawer-open", open);
-          trigger?.setAttribute("aria-expanded", String(open));
+        const root = document.documentElement;
+        const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const store = {
+          get(key, fallback) {
+            try {
+              return localStorage.getItem(key) ?? fallback;
+            } catch {
+              return fallback;
+            }
+          },
+          set(key, value) {
+            try {
+              localStorage.setItem(key, value);
+            } catch {
+              /* 隐私模式下忽略 */
+            }
+          },
         };
 
-        trigger?.addEventListener("click", () =>
-          setOpen(!body.classList.contains("drawer-open")),
-        );
-        backdrop?.addEventListener("click", () => setOpen(false));
+        /* ---------- 四季与昼夜 ---------- */
+        (() => {
+          const seasons = ["spring", "summer", "autumn", "winter"];
+          let season = store.get("season", "");
+          if (seasons.indexOf(season) === -1) {
+            const forced = new URLSearchParams(location.search).get("season");
+            if (seasons.indexOf(forced) !== -1) {
+              season = forced;
+            } else {
+              const month = new Date().getMonth();
+              season =
+                month >= 2 && month <= 4
+                  ? "spring"
+                  : month >= 5 && month <= 7
+                    ? "summer"
+                    : month >= 8 && month <= 10
+                      ? "autumn"
+                      : "winter";
+            }
+          }
+          root.dataset.season = season;
+
+          const hour = new Date().getHours();
+          if (hour >= 17 && hour < 19) root.dataset.time = "dusk";
+        })();
+
+        /* ---------- 深浅色（带水面涟漪） ---------- */
+        const setTheme = (next) => {
+          root.dataset.theme = next;
+          store.set("theme", next);
+        };
+
+        const toggleTheme = (button) => {
+          const next = root.dataset.theme === "dark" ? "light" : "dark";
+          if (!document.startViewTransition || still) {
+            setTheme(next);
+            return;
+          }
+
+          const rect = button ? button.getBoundingClientRect() : null;
+          const x = rect ? rect.left + rect.width / 2 : window.innerWidth - 40;
+          const y = rect ? rect.top + rect.height / 2 : 40;
+          const radius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y),
+          );
+
+          root.classList.add("theme-transition");
+          const transition = document.startViewTransition(() => setTheme(next));
+          transition.finished.finally(() => root.classList.remove("theme-transition"));
+          transition.ready
+            .then(() => {
+              document.documentElement.animate(
+                {
+                  clipPath: [
+                    `circle(0px at ${x}px ${y}px)`,
+                    `circle(${radius}px at ${x}px ${y}px)`,
+                  ],
+                },
+                {
+                  duration: 520,
+                  easing: "ease-in-out",
+                  pseudoElement: "::view-transition-new(root)",
+                },
+              );
+            })
+            .catch(() => root.classList.remove("theme-transition"));
+        };
+
+        /* ---------- 中英文 ---------- */
+        const toggleLang = () => {
+          const next = root.dataset.lang === "en" ? "zh" : "en";
+          root.dataset.lang = next;
+          store.set("lang", next);
+        };
+
+        /* ---------- 窄屏抽屉 ---------- */
+        const setDrawer = (open) => {
+          document.body.classList.toggle("drawer-open", open);
+          document.getElementById("menu-open")?.setAttribute("aria-expanded", String(open));
+        };
+
+        /* ---------- 点击树枝飘落叶子 ---------- */
+        const dropLeaves = (sprig) => {
+          if (still) return;
+          const rect = sprig.getBoundingClientRect();
+          for (let i = 0; i < 7; i += 1) {
+            const leaf = document.createElement("span");
+            leaf.className = "leaf-fall";
+            leaf.style.left = `${rect.left + Math.random() * rect.width}px`;
+            leaf.style.top = `${rect.top + 6}px`;
+            leaf.style.setProperty("--dx", `${(Math.random() - 0.5) * 130}px`);
+            leaf.style.animationDelay = `${Math.random() * 0.45}s`;
+            leaf.style.animationDuration = `${2.2 + Math.random() * 1.1}s`;
+            document.body.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 4200);
+          }
+        };
+
+        /* ---------- 统一的事件委托 ---------- */
+        document.addEventListener("click", (event) => {
+          const target = event.target instanceof Element ? event.target : null;
+          if (!target) return;
+
+          const themeButton = target.closest("[data-theme-toggle]");
+          if (themeButton) {
+            toggleTheme(themeButton);
+            return;
+          }
+
+          if (target.closest("[data-lang-toggle]")) {
+            toggleLang();
+            return;
+          }
+
+          const random = target.closest("[data-random-post]");
+          if (random) {
+            const pool = (random.getAttribute("data-random-post") || "").split("|").filter(Boolean);
+            if (pool.length) {
+              location.href = pool[Math.floor(Math.random() * pool.length)];
+            }
+            return;
+          }
+
+          const sprig = target.closest(".sidebar-sprig");
+          if (sprig) {
+            dropLeaves(sprig);
+            return;
+          }
+
+          if (target.closest("#menu-open")) {
+            setDrawer(!document.body.classList.contains("drawer-open"));
+            return;
+          }
+
+          if (target.closest("#sidebar-backdrop")) {
+            setDrawer(false);
+            return;
+          }
+
+          if (window.innerWidth < 1024 && target.closest("#sidebar a")) {
+            setDrawer(false);
+          }
+        });
+
         document.addEventListener("keydown", (event) => {
-          if (event.key === "Escape") setOpen(false);
-        });
-        sidebar?.querySelectorAll("a").forEach((link) => {
-          link.addEventListener("click", () => setOpen(false));
+          if (event.key === "Escape") setDrawer(false);
         });
 
-        document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
-          button.addEventListener("click", () => {
-            const root = document.documentElement;
-            const next = root.dataset.theme === "dark" ? "light" : "dark";
-            root.dataset.theme = next;
-            try {
-              localStorage.setItem("theme", next);
-            } catch {
-              /* 隐私模式下忽略 */
-            }
-          });
-        });
+        /* ---------- 阅读进度：右侧藤蔓 + 本地足迹 ---------- */
+        const stem = document.querySelector(".reading-vine .stem");
+        const leafTip = document.querySelector(".reading-vine .leaf");
+        const article = document.querySelector("article[data-post-id]");
+        const postId = article?.dataset.postId;
+        const postTitle = article?.dataset.postTitle;
+        let queued = false;
 
-        document.querySelectorAll("[data-lang-toggle]").forEach((button) => {
-          button.addEventListener("click", () => {
-            const root = document.documentElement;
-            const next = root.dataset.lang === "en" ? "zh" : "en";
-            root.dataset.lang = next;
-            try {
-              localStorage.setItem("lang", next);
-            } catch {
-              /* 隐私模式下忽略 */
-            }
-          });
-        });
+        const readStore = () => {
+          try {
+            return JSON.parse(localStorage.getItem("ll-reading") || "{}");
+          } catch {
+            return {};
+          }
+        };
+
+        const updateProgress = () => {
+          queued = false;
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const ratio = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
+
+          if (stem) stem.style.height = `${ratio * 100}%`;
+          if (leafTip) leafTip.style.top = `${ratio * 100}%`;
+
+          if (!postId || !postTitle || ratio < 0.03) return;
+
+          try {
+            const data = readStore();
+            data[postId] = {
+              title: postTitle,
+              url: location.pathname,
+              progress: Math.round(ratio * 100),
+              ts: Date.now(),
+            };
+            const keep = Object.entries(data)
+              .sort((a, b) => b[1].ts - a[1].ts)
+              .slice(0, 40);
+            localStorage.setItem("ll-reading", JSON.stringify(Object.fromEntries(keep)));
+          } catch {
+            /* 存不下就算了 */
+          }
+        };
+
+        const onScroll = () => {
+          if (queued) return;
+          queued = true;
+          requestAnimationFrame(updateProgress);
+        };
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        updateProgress();
+
+        /* ---------- 侧栏「继续阅读」 ---------- */
+        (() => {
+          const card = document.getElementById("resume-card");
+          if (!card) return;
+          const data = readStore();
+          const latest = Object.entries(data)
+            .filter(([, item]) => item && item.progress > 3 && item.progress < 95)
+            .sort((a, b) => b[1].ts - a[1].ts)[0];
+          if (!latest || latest[1].url === location.pathname) return;
+
+          const link = document.getElementById("resume-link");
+          const title = document.getElementById("resume-title");
+          const progress = document.getElementById("resume-progress");
+          if (!link || !title || !progress) return;
+          link.setAttribute("href", latest[1].url);
+          title.textContent = latest[1].title;
+          progress.textContent = `${latest[1].progress}%`;
+          card.hidden = false;
+        })();
+
+        /* ---------- 站龄 ---------- */
+        (() => {
+          const age = document.getElementById("site-age");
+          if (!age || !age.dataset.since) return;
+          const days = Math.floor((Date.now() - new Date(age.dataset.since).getTime()) / 86400000);
+          if (days >= 0) age.textContent = String(days);
+        })();
       })();
     </script>
   </body>

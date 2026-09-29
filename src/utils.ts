@@ -120,6 +120,11 @@ export function postUrl(post: Post) {
   return href(`/posts/${post.id}/`);
 }
 
+/** 供 CSS view-transition-name 使用的合法标识符 */
+export function transitionName(id: string) {
+  return `p${id.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+}
+
 export function tagUrl(tag: string) {
   return href(`/tags/${encodeURIComponent(tag)}/`);
 }

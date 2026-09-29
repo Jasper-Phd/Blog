@@ -14,6 +14,7 @@ import {
   readingTime,
   sortByPubDate,
   tagUrl,
+  transitionName,
   type Post,
 } from "../../utils";
 
@@ -48,7 +49,12 @@ const { title, description, pubDatetime, updatedDatetime, tags, categories } =
   publishedTime={pubDatetime}
   toc={headings}
 >
-  <article class="mx-auto max-w-3xl">
+  <div class="reading-vine" aria-hidden="true">
+    <span class="stem"></span>
+    <span class="leaf"></span>
+  </div>
+
+  <article class="mx-auto max-w-3xl" data-post-id={post.id} data-post-title={title}>
     <header class="mb-8">
       <div class="muted flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.8125rem]">
         <FormattedDate date={pubDatetime} />
@@ -66,7 +72,10 @@ const { title, description, pubDatetime, updatedDatetime, tags, categories } =
         }
       </div>
 
-      <h1 class="m-0 mt-3 text-[1.9rem] font-bold leading-[1.2] tracking-tight sm:text-[2.2rem]">
+      <h1
+        class="m-0 mt-3 text-[1.9rem] font-bold leading-[1.2] tracking-tight sm:text-[2.2rem]"
+        style={`view-transition-name: ${transitionName(post.id)}`}
+      >
         {title}
       </h1>
 

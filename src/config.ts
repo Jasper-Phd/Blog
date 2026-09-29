@@ -22,6 +22,14 @@ export const SITE = {
   /** 侧边栏「联系方式」里显示的邮箱 */
   email: "jasperli.phd@gmail.com",
 
+  /** 建站日期，页脚据此显示站龄 */
+  since: "2026-09-29",
+
+  /** 关于页的时间轴；留空则不显示整块 */
+  timeline: [
+    { year: "2026", zh: "开始写这个博客", en: "Started this blog" },
+  ] as { year: string; zh: string; en: string }[],
+
   /** 列表每页显示几篇文章 */
   postsPerPage: 3,
 

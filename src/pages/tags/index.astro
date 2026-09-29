@@ -1,21 +1,135 @@
 ---
 import { getCollection } from "astro:content";
+import T from "../../components/T.astro";
 import { SITE } from "../../config";
 import Layout from "../../layouts/Layout.astro";
-import { getUniqueTags, postFilter, tagUrl } from "../../utils";
-import T from "../../components/T.astro";
+import { getUniqueTags, postFilter, tagUrl, type Post } from "../../utils";
 
 const posts = await getCollection("posts", postFilter);
 const tags = getUniqueTags(posts);
+
+/* ---------------- 标签星图 ----------------
+   节点是标签，同一篇文章里出现过就连一条线。
+   布局在构建时算好，页面输出的是纯静态 SVG。 */
+const W = 620;
+const H = 460;
+
+type Node = { tag: string; count: number; x: number; y: number };
+type Edge = { a: number; b: number; weight: number };
+
+const nodes: Node[] = tags.map((item, i) => {
+  const angle = (i / Math.max(1, tags.length)) * Math.PI * 2;
+  return {
+    tag: item.tag,
+    count: item.count,
+    x: W / 2 + Math.cos(angle) * 170,
+    y: H / 2 + Math.sin(angle) * 140,
+  };
+});
+
+const indexOf = new Map(nodes.map((node, i) => [node.tag, i]));
+
+const edgeWeight = new Map<string, number>();
+for (const post of posts as Post[]) {
+  const list = post.data.tags;
+  for (let i = 0; i < list.length; i += 1) {
+    for (let j = i + 1; j < list.length; j += 1) {
+      const key = [list[i], list[j]].sort().join("\u0000");
+      edgeWeight.set(key, (edgeWeight.get(key) ?? 0) + 1);
+    }
+  }
+}
+
+const edges: Edge[] = [...edgeWeight.entries()].map(([key, weight]) => {
+  const [a, b] = key.split("\u0000");
+  return { a: indexOf.get(a) ?? 0, b: indexOf.get(b) ?? 0, weight };
+});
+
+for (let step = 0; step < 280; step += 1) {
+  const fx = nodes.map(() => 0);
+  const fy = nodes.map(() => 0);
+
+  for (let i = 0; i < nodes.length; i += 1) {
+    for (let j = i + 1; j < nodes.length; j += 1) {
+      let dx = nodes[j].x - nodes[i].x;
+      let dy = nodes[j].y - nodes[i].y;
+      let d2 = dx * dx + dy * dy;
+      if (d2 < 4) {
+        dx = (i % 3) - 1;
+        dy = (j % 3) - 1;
+        d2 = 4;
+      }
+      const d = Math.sqrt(d2);
+      const push = 30000 / d2;
+      fx[i] -= (dx / d) * push;
+      fy[i] -= (dy / d) * push;
+      fx[j] += (dx / d) * push;
+      fy[j] += (dy / d) * push;
+    }
+  }
+
+  for (const edge of edges) {
+    const dx = nodes[edge.b].x - nodes[edge.a].x;
+    const dy = nodes[edge.b].y - nodes[edge.a].y;
+    const d = Math.max(1, Math.hypot(dx, dy));
+    const pull = (d - 130) * 0.014 * edge.weight;
+    fx[edge.a] += (dx / d) * pull;
+    fy[edge.a] += (dy / d) * pull;
+    fx[edge.b] -= (dx / d) * pull;
+    fy[edge.b] -= (dy / d) * pull;
+  }
+
+  for (let i = 0; i < nodes.length; i += 1) {
+    fx[i] += (W / 2 - nodes[i].x) * 0.014;
+    fy[i] += (H / 2 - nodes[i].y) * 0.014;
+    nodes[i].x = Math.min(W - 50, Math.max(50, nodes[i].x + fx[i] * 0.07));
+    nodes[i].y = Math.min(H - 52, Math.max(34, nodes[i].y + fy[i] * 0.07));
+  }
+}
+
+const radiusOf = (count: number) => 11 + Math.min(9, count * 2.4);
 ---
 
 <Layout title="标签" description={`${SITE.title} 的全部标签`}>
   <header class="mb-8">
     <h1 class="page-title m-0"><T zh="标签" en="Tags" /></h1>
-    <p class="muted mt-2 mb-0 text-[0.9375rem]">
+    <p class="muted m-0 mt-2 text-[0.9375rem]">
       <T zh={`共 ${tags.length} 个标签`} en={`${tags.length} tags in total`} />
     </p>
   </header>
+
+  {
+    tags.length > 1 && (
+      <svg
+        class="tag-graph"
+        viewBox={`0 0 ${W} ${H}`}
+        role="img"
+        aria-label="标签关系图：节点是标签，连线表示它们出现在同一篇文章里"
+      >
+        <g>
+          {edges.map((edge) => (
+            <line
+              x1={nodes[edge.a].x}
+              y1={nodes[edge.a].y}
+              x2={nodes[edge.b].x}
+              y2={nodes[edge.b].y}
+              stroke-width={Math.min(3, edge.weight)}
+            />
+          ))}
+        </g>
+        <g>
+          {nodes.map((node) => (
+            <a href={tagUrl(node.tag)}>
+              <circle cx={node.x} cy={node.y} r={radiusOf(node.count)} />
+              <text x={node.x} y={node.y + radiusOf(node.count) + 15}>
+                {node.tag}
+              </text>
+            </a>
+          ))}
+        </g>
+      </svg>
+    )
+  }
 
   <div class="flex flex-wrap gap-2">
     {

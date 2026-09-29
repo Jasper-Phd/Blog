@@ -1,7 +1,9 @@
 ---
 import MarkdownPage from "../components/MarkdownPage.astro";
+import Timeline from "../components/Timeline.astro";
 import { SITE } from "../config";
 ---
 
-<MarkdownPage id="about" zh="关于" en="About" description={`关于 ${SITE.author}`} />
-
+<MarkdownPage id="about" zh="关于" en="About" description={`关于 ${SITE.author}`}>
+  <Timeline />
+</MarkdownPage>

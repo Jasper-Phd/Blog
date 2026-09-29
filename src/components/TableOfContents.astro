@@ -10,7 +10,7 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
 
 {
   toc.length > 1 && (
-    <nav class="surface p-4" aria-labelledby="toc-heading">
+    <nav class="toc-box surface p-4" aria-labelledby="toc-heading">
       <p
         id="toc-heading"
         class="muted mb-2 text-[0.75rem] font-semibold uppercase tracking-wider"
@@ -27,4 +27,3 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
     </nav>
   )
 }
-

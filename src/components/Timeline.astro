@@ -1,0 +1,22 @@
+---
+import { SITE } from "../config";
+import T from "./T.astro";
+
+const items = SITE.timeline;
+---
+
+{
+  items.length > 0 && (
+    <ul class="timeline">
+      {items.map((item) => (
+        <li>
+          <span class="timeline-year">{item.year}</span>
+          <span class="timeline-text">
+            <T zh={item.zh} en={item.en} />
+          </span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+

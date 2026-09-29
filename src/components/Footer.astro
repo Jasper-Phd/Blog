@@ -1,5 +1,6 @@
 ---
 import NatureScene from "./NatureScene.astro";
+import T from "./T.astro";
 import { SITE } from "../config";
 import { href } from "../utils";
 
@@ -7,6 +8,11 @@ const year = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
   timeZone: SITE.timezone,
 }).format(new Date());
+
+const siteAge = Math.max(
+  0,
+  Math.floor((Date.now() - new Date(SITE.since).getTime()) / 86400000),
+);
 ---
 
 <footer class="content-footer">
@@ -17,7 +23,13 @@ const year = new Intl.DateTimeFormat("en-US", {
   <div
     class="muted flex flex-col items-center justify-between gap-3 py-6 text-[0.8125rem] sm:flex-row"
   >
-    <p class="m-0">© {year} {SITE.author} · {SITE.title}</p>
+    <p class="m-0">
+      © {year} {SITE.author} · {SITE.title}
+      <span aria-hidden="true"> · </span>
+      <T zh="本站已运行" en="Running for" />
+      <span id="site-age" data-since={SITE.since}>{siteAge}</span>
+      <T zh="天" en="days" />
+    </p>
     <div class="flex items-center gap-4">
       {
         SITE.social.map((item) => (
