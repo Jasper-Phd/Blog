@@ -25,15 +25,17 @@ export function sortByPubDate(a: Post, b: Post) {
   return b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf();
 }
 
-const dateFormatter = new Intl.DateTimeFormat(SITE.lang, {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-  timeZone: SITE.timezone,
-});
-
+/** 统一输出 YYYY-MM-DD，避免不同地区格式不一致 */
 export function formattedDate(date: Date) {
-  return dateFormatter.format(date);
+  const parts = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: SITE.timezone,
+  }).formatToParts(date);
+  const pick = (type: string) =>
+    parts.find((part) => part.type === type)?.value ?? "";
+  return `${pick("year")}-${pick("month")}-${pick("day")}`;
 }
 
 export function yearOf(date: Date) {

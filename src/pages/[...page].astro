@@ -3,7 +3,6 @@ import type { GetStaticPaths, Page } from "astro";
 import { getCollection } from "astro:content";
 import Pagination from "../components/Pagination.astro";
 import PostListItem from "../components/PostListItem.astro";
-import SwingDivider from "../components/SwingDivider.astro";
 import { SITE } from "../config";
 import Layout from "../layouts/Layout.astro";
 import { postFilter, sortByPubDate, type Post } from "../utils";
@@ -27,7 +26,7 @@ const isFirstPage = page.currentPage === 1;
       <div class="post-list">
         {page.data.map((post, index) => (
           <Fragment>
-            {index > 0 && <SwingDivider />}
+            {index > 0 && <hr class="post-divider" />}
             <PostListItem post={post} />
           </Fragment>
         ))}
