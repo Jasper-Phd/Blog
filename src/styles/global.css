@@ -169,6 +169,22 @@ body {
   filter: brightness(0.96);
 }
 
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.65rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border-radius: 999px;
+  transition: opacity 0.15s ease;
+}
+
+.chip:hover {
+  opacity: 0.86;
+}
+
 [data-theme="dark"] .tag:hover {
   filter: brightness(1.15);
 }
@@ -223,6 +239,243 @@ body {
   font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   3.5 左侧栏
+   ============================================================ */
+.sidebar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.sidebar-author {
+  margin: 0.15rem 0 0;
+  font-size: 0.875rem;
+  color: var(--fg-soft);
+}
+
+.sidebar-tagline {
+  margin: 0.3rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+}
+
+.sidebar-heading {
+  margin: 0 0 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-muted);
+}
+
+.sidebar-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.9375rem;
+  color: var(--fg-soft);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid transparent;
+  transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease,
+    padding-left 0.16s ease;
+}
+
+.sidebar-nav-link .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+.sidebar-nav-link:hover {
+  color: var(--fg);
+  background: var(--bg-soft);
+  padding-left: 0.85rem;
+}
+
+.sidebar-nav-link:hover .dot {
+  background: var(--accent);
+  transform: scale(1.4);
+}
+
+.sidebar-nav-link[aria-current="page"] {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+.sidebar-nav-link[aria-current="page"] .dot {
+  background: var(--accent);
+}
+
+.avatar {
+  display: block;
+  width: 6.5rem;
+  height: 6.5rem;
+  object-fit: cover;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.04);
+  box-shadow: var(--shadow-md);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  padding: 0.5rem 0.25rem;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: color 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+}
+
+.stat:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.stat-num {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--fg);
+  transition: color 0.16s ease;
+}
+
+.stat:hover .stat-num {
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+}
+
+/* 联系方式：悬停带位移的「传送」效果 */
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.875rem;
+  color: var(--fg-soft);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.contact-link:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  transform: translateX(4px);
+}
+
+.contact-link .arrow {
+  margin-left: auto;
+  opacity: 0.4;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.contact-link:hover .arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+.friend-link {
+  display: block;
+  padding: 0.35rem 0;
+  font-size: 0.875rem;
+  color: var(--fg-soft);
+  transition: color 0.16s ease, padding-left 0.16s ease;
+}
+
+.friend-link:hover {
+  color: var(--accent);
+  padding-left: 0.3rem;
+}
+
+/* 宽屏：固定在左侧；窄屏：抽屉式侧栏 */
+@media (min-width: 1024px) {
+  .sidebar {
+    position: sticky;
+    top: 2rem;
+    align-self: flex-start;
+    width: 17rem;
+    flex-shrink: 0;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 60;
+    width: 19rem;
+    max-width: 86vw;
+    padding: 1.25rem;
+    overflow-y: auto;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  body.drawer-open .sidebar {
+    transform: translateX(0);
+  }
+
+  body.drawer-open {
+    overflow: hidden;
+  }
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+body.drawer-open .sidebar-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (min-width: 1024px) {
+  .sidebar-backdrop {
+    display: none;
+  }
 }
 
 /* ============================================================
@@ -472,4 +725,17 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* 主题切换按钮的图标：浅色显示月亮，深色显示太阳 */
+.theme-icon-sun {
+  display: none;
+}
+
+[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+
+[data-theme="dark"] .theme-icon-sun {
+  display: block;
 }

@@ -19,16 +19,26 @@ export const SITE = {
   githubUser: "Jasper-Phd",
   repo: "Jasper-Phd/Jasper-Phd.github.io",
 
+  /** 侧边栏「联系方式」里显示的邮箱 */
+  email: "jasperli.phd@gmail.com",
+
   /** 首页每页显示几篇文章 */
   postsPerPage: 8,
 
-  /** 顶部导航 */
+  /** 侧边栏导航 */
   nav: [
     { text: "首页", href: "/" },
+    { text: "分类", href: "/categories/" },
     { text: "标签", href: "/tags/" },
     { text: "归档", href: "/archives/" },
     { text: "关于", href: "/about/" },
   ],
+
+  /**
+   * 友情链接。留空则侧边栏不显示这一块。
+   * 添加格式：{ name: "站名", href: "https://example.com" }
+   */
+  friends: [] as { name: string; href: string }[],
 
   /** 社交链接（footer 与关于页使用） */
   social: [

@@ -2,6 +2,7 @@
 title: 开篇：为什么重新搭一个博客
 description: 从旧站到新站的取舍，以及 LadyLiberty 之后会写些什么。
 pubDatetime: 2026-09-29T09:30:00+08:00
+categories: [随笔]
 tags: [随笔, 建站]
 featured: true
 draft: false
@@ -32,4 +33,3 @@ draft: false
 > 把想法写清楚，是对自己思路最严格的检验。
 
 如果你也是做研究的，希望这里的某一篇能省下你一个下午。
-

@@ -13,6 +13,7 @@ const posts = defineCollection({
     description: z.string().default(""),
     pubDatetime: z.coerce.date(),
     updatedDatetime: z.coerce.date().optional(),
+    categories: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
     /** draft: true 的文章只在本地开发时可见，不会发布 */
     draft: z.boolean().default(false),

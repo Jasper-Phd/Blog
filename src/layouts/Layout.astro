@@ -2,6 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import Sidebar from "../components/Sidebar.astro";
 import { SITE } from "../config";
 import "katex/dist/katex.min.css";
 import "../styles/global.css";
@@ -41,19 +42,65 @@ const { title, description, ogType, publishedTime, noindex } = Astro.props;
     </script>
   </head>
 
-  <body class="flex min-h-screen flex-col">
+  <body class="min-h-screen">
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-[var(--accent)] focus:px-3 focus:py-2 focus:text-[var(--accent-fg)]"
       >跳到正文</a
     >
 
-    <Header />
+    <div class="mx-auto flex w-full max-w-[1200px] gap-10 px-5 py-8">
+      <Sidebar />
 
-    <main id="main" class="mx-auto w-full max-w-5xl flex-1 px-5 py-10" data-pagefind-body>
-      <slot />
-    </main>
+      <div class="flex min-w-0 flex-1 flex-col">
+        <Header />
 
-    <Footer />
+        <main id="main" class="flex-1" data-pagefind-body>
+          <slot />
+        </main>
+
+        <Footer />
+      </div>
+    </div>
+
+    <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
+    <script is:inline>
+      (() => {
+        const body = document.body;
+        const trigger = document.getElementById("menu-open");
+        const backdrop = document.getElementById("sidebar-backdrop");
+        const sidebar = document.getElementById("sidebar");
+
+        const setOpen = (open) => {
+          body.classList.toggle("drawer-open", open);
+          trigger?.setAttribute("aria-expanded", String(open));
+        };
+
+        trigger?.addEventListener("click", () =>
+          setOpen(!body.classList.contains("drawer-open")),
+        );
+        backdrop?.addEventListener("click", () => setOpen(false));
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") setOpen(false);
+        });
+        sidebar?.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => setOpen(false));
+        });
+
+        document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const root = document.documentElement;
+            const next = root.dataset.theme === "dark" ? "light" : "dark";
+            root.dataset.theme = next;
+            try {
+              localStorage.setItem("theme", next);
+            } catch {
+              /* 隐私模式下忽略 */
+            }
+          });
+        });
+      })();
+    </script>
   </body>
 </html>

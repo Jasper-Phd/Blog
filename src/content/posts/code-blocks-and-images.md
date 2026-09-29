@@ -2,6 +2,7 @@
 title: 代码块、表格与图文混排
 description: 展示正文里最常用的几种排版元素，顺便记录一个真实的小问题。
 pubDatetime: 2026-09-22T20:05:00+08:00
+categories: [技术]
 tags: [工程, 工具]
 featured: false
 draft: false
@@ -69,4 +70,3 @@ export function postFilter({ data }: Post) {
 ```
 
 如果图片来自网络，记得在 Markdown 里写清楚来源，方便日后追溯。
-

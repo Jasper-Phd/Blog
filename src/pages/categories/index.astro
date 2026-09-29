@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import { SITE } from "../../config";
+import Layout from "../../layouts/Layout.astro";
+import { categoryUrl, getUniqueCategories, postFilter } from "../../utils";
+
+const posts = await getCollection("posts", postFilter);
+const categories = getUniqueCategories(posts);
+---
+
+<Layout title="分类" description={`${SITE.title} 的全部分类`}>
+  <header class="mb-8">
+    <h1 class="page-title m-0">分类</h1>
+    <p class="muted m-0 mt-2 text-[0.9375rem]">共 {categories.length} 个分类</p>
+  </header>
+
+  <ul class="m-0 flex list-none flex-col gap-3 p-0">
+    {
+      categories.map(({ category, count }) => (
+        <li>
+          <a
+            href={categoryUrl(category)}
+            class="card flex items-center justify-between gap-4"
+          >
+            <span class="card-title">{category}</span>
+            <span class="muted shrink-0 text-[0.8125rem]">{count} 篇</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
+

@@ -51,6 +51,7 @@ npm run new "文章标题"
 title: 文章标题
 description: 一句话摘要，用于列表页与搜索引擎
 pubDatetime: 2026-09-29T10:00:00+08:00
+categories: [随笔]      # 分类，用于侧边栏统计与 /categories/ 页面
 tags: [随笔, 工具]
 featured: false   # true 会出现在首页「精选」区
 draft: true       # true 只在本地可见，不会发布
@@ -122,10 +123,30 @@ const BASE_PATH = process.env.BASE_PATH ?? "/仓库名";
 | 想改什么 | 改哪里 |
 | --- | --- |
 | 博客名、作者、简介、导航、社交链接 | `src/config.ts` |
+| 侧边栏显示的邮箱与 GitHub | `src/config.ts` 的 `email`、`githubUser` |
+| 友链 | `src/config.ts` 的 `friends`，留空则侧边栏不显示这一块 |
+| 个人头像 | 把照片命名成 `avatar.jpg` 放进 `public/` 目录即可，自动替换占位图 |
 | 配色、字体、圆角、正文排版 | `src/styles/global.css` 顶部的变量区 |
 | 站点地址 | `astro.config.mjs` 的 `SITE_URL` |
 | 页面结构（首页、文章页、归档页……） | `src/pages/` |
 | 文章可用的 frontmatter 字段 | `src/content.config.ts` |
+
+## 侧边栏
+
+左侧栏从上到下依次是：博客名 → 作者署名 → 导航 → 头像 → 文章/分类/标签统计（可点击进入对应页面）→ 邮箱与 GitHub（悬停有位移的传送效果）→ 友链 → 搜索 / 深浅色 / RSS 工具行。
+
+宽屏下它固定在左侧跟随滚动；窄屏下自动收进抽屉，由右上角的菜单键唤出（点遮罩、按 Esc 或点任意链接都会关闭）。
+
+添加友链：
+
+```ts
+// src/config.ts
+friends: [
+  { name: "某某的博客", href: "https://example.com" },
+],
+```
+
+头像同理，把图片放到 `public/avatar.jpg`（也支持 `.png` / `.webp` / `.svg`）就会自动生效，不需要改代码。
 
 ## 目录结构
 
@@ -134,11 +155,11 @@ const BASE_PATH = process.env.BASE_PATH ?? "/仓库名";
 ├─ public/                        原样输出的静态资源
 ├─ scripts/new-post.mjs           新建文章脚本
 ├─ src/
-│  ├─ components/                 页头、页脚、文章卡、目录、评论
+│  ├─ components/                 侧边栏、窄屏顶栏、页脚、文章卡、目录、评论
 │  ├─ content/posts/              你的文章
 │  ├─ content/pages/about.md      关于页
 │  ├─ layouts/Layout.astro        页面骨架
-│  ├─ pages/                      路由：/、/posts、/tags、/archives、/about、/search、/rss.xml、/robots.txt
+│  ├─ pages/                      路由：/、/posts、/categories、/tags、/archives、/about、/search、/rss.xml、/robots.txt
 │  ├─ styles/global.css           全部样式与设计变量
 │  ├─ config.ts                   站点配置
 │  └─ content.config.ts           内容字段定义

@@ -62,21 +62,43 @@ export function tagUrl(tag: string) {
   return href(`/tags/${encodeURIComponent(tag)}/`);
 }
 
+export function categoryUrl(category: string) {
+  return href(`/categories/${encodeURIComponent(category)}/`);
+}
+
+function countBy(values: string[]) {
+  const counter = new Map<string, number>();
+  for (const value of values) {
+    counter.set(value, (counter.get(value) ?? 0) + 1);
+  }
+  return counter;
+}
+
 /** 统计所有标签及其文章数，按数量倒序 */
 export function getUniqueTags(posts: Post[]) {
-  const counter = new Map<string, number>();
-  for (const post of posts) {
-    for (const tag of post.data.tags) {
-      counter.set(tag, (counter.get(tag) ?? 0) + 1);
-    }
-  }
+  const counter = countBy(posts.flatMap((post) => post.data.tags));
   return [...counter.entries()]
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag, SITE.lang));
 }
 
+/** 统计所有分类及其文章数，按数量倒序 */
+export function getUniqueCategories(posts: Post[]) {
+  const counter = countBy(posts.flatMap((post) => post.data.categories));
+  return [...counter.entries()]
+    .map(([category, count]) => ({ category, count }))
+    .sort(
+      (a, b) =>
+        b.count - a.count || a.category.localeCompare(b.category, SITE.lang),
+    );
+}
+
 export function getPostsByTag(posts: Post[], tag: string) {
   return posts.filter((post) => post.data.tags.includes(tag));
+}
+
+export function getPostsByCategory(posts: Post[], category: string) {
+  return posts.filter((post) => post.data.categories.includes(category));
 }
 
 /** 按年份分组，用于归档页 */
