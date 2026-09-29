@@ -66,7 +66,7 @@ export function postFilter({ data }: Post) {
 图片放在 `src/assets/` 目录里，构建时会自动压缩并转成更省流量的格式：
 
 ```markdown
-![示意图](../assets/example.png)
+![示意图](../../assets/example.png)
 ```
 
 如果图片来自网络，记得在 Markdown 里写清楚来源，方便日后追溯。

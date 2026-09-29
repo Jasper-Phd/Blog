@@ -44,14 +44,18 @@ const template = `---
 title: ${title}
 description: ""
 pubDatetime: ${date}T${time}${timezone}
+categories: []
 tags: []
 featured: false
 draft: true
 ---
 
+<!-- 提示：写完把 draft 改成 false 才会发布。
+     插图片写成 ![说明](../../assets/图片名.png)，图片放在 src/assets/ 目录，构建时自动压缩。 -->
+
 在这里开始写正文。
+
 `;
 
 writeFileSync(filePath, template, "utf8");
 console.log(`已创建 ${filePath}`);
-
